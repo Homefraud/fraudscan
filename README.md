@@ -1,2 +1,0 @@
-# fraudscan
-HFD FraudScan
