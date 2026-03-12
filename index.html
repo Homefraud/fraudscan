@@ -1,0 +1,2317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HFD™ Fraud Scanner | Home Fraud Defense™</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0A1E3D;
+    --navy-mid: #112847;
+    --navy-light: #1a3a5c;
+    --gold: #C8962E;
+    --gold-light: #e0ab45;
+    --gold-pale: #fdf3e0;
+    --white: #FFFFFF;
+    --off-white: #F7F8FA;
+    --gray-100: #F0F2F5;
+    --gray-200: #E2E6ED;
+    --gray-500: #8A95A3;
+    --gray-700: #3D4B5C;
+    --text: #1A2535;
+    --green: #1A7A4A;
+    --green-bg: #E8F5EE;
+    --amber: #B85C00;
+    --amber-bg: #FFF3E0;
+    --red: #B01C1C;
+    --red-bg: #FDEAEA;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--off-white); color: var(--text); min-height: 100vh; }
+
+  /* HERO */
+  .hfd-hero {
+    background: var(--navy);
+    padding: 56px 40px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hfd-hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 100%, rgba(200,150,46,0.09) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hfd-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; }
+  .hfd-hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 4.5vw, 48px);
+    font-weight: 900; color: var(--white); line-height: 1.1;
+    margin: 0 auto 18px; max-width: 680px;
+  }
+  .hfd-hero h1 span { color: var(--gold); }
+  .hfd-hero-sub { font-size: 16px; color: rgba(255,255,255,0.68); max-width: 540px; margin: 0 auto 36px; line-height: 1.65; font-weight: 300; }
+  .hfd-stats { display: flex; justify-content: center; gap: 44px; flex-wrap: wrap; }
+  .hfd-stat-num { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; color: var(--gold); }
+  .hfd-stat-label { font-size: 11px; color: rgba(255,255,255,0.45); margin-top: 3px; letter-spacing: 0.04em; }
+
+  /* CARD */
+  .hfd-wrap { max-width: 800px; margin: -20px auto 0; padding: 0 20px 56px; position: relative; z-index: 10; }
+  .hfd-card {
+    background: var(--white);
+    border-radius: 4px;
+    box-shadow: 0 8px 48px rgba(10,30,61,0.15), 0 2px 8px rgba(10,30,61,0.07);
+    overflow: hidden;
+    border-top: 4px solid var(--gold);
+  }
+  .hfd-card-header {
+    background: var(--gray-100); padding: 18px 28px;
+    border-bottom: 1px solid var(--gray-200);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .hfd-shield {
+    width: 38px; height: 38px; background: var(--navy);
+    border-radius: 3px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .hfd-card-header h2 { font-family: 'Playfair Display', serif; font-size: 19px; font-weight: 700; color: var(--navy); }
+  .hfd-card-header p { font-size: 12px; color: var(--gray-500); margin-top: 1px; }
+
+  /* TABS */
+  .hfd-tabs-section { padding: 22px 28px 0; }
+  .hfd-field-label { font-size: 11px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gray-500); margin-bottom: 10px; }
+  .hfd-tabs { display: flex; gap: 7px; flex-wrap: wrap; }
+  .hfd-tab {
+    padding: 7px 14px; border: 1.5px solid var(--gray-200); border-radius: 3px;
+    font-size: 13px; font-weight: 500; color: var(--gray-700); background: var(--white);
+    cursor: pointer; transition: all 0.14s; display: flex; align-items: center; gap: 5px;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .hfd-tab:hover { border-color: var(--navy); color: var(--navy); }
+  .hfd-tab.active { background: var(--navy); border-color: var(--navy); color: var(--white); }
+
+  /* TEXTAREA */
+  .hfd-input-section { padding: 18px 28px 0; }
+  .hfd-char-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 9px; }
+  .hfd-char-count { font-size: 11px; color: var(--gray-500); }
+  .hfd-textarea {
+    width: 100%; min-height: 175px; padding: 14px;
+    border: 1.5px solid var(--gray-200); border-radius: 3px;
+    font-family: 'DM Sans', sans-serif; font-size: 14px; line-height: 1.6;
+    color: var(--text); resize: vertical; transition: border-color 0.14s; background: var(--off-white);
+  }
+  .hfd-textarea:focus { outline: none; border-color: var(--navy); background: var(--white); }
+  .hfd-textarea::placeholder { color: var(--gray-500); }
+  .hfd-example-link {
+    font-size: 12px; color: var(--gold); font-weight: 500; cursor: pointer;
+    margin-top: 7px; display: inline-block; background: none; border: none;
+    font-family: 'DM Sans', sans-serif; text-decoration: underline;
+    text-decoration-color: transparent; transition: text-decoration-color 0.14s; padding: 0;
+  }
+  .hfd-example-link:hover { text-decoration-color: var(--gold); }
+
+  /* ACTIONS */
+  .hfd-actions { padding: 18px 28px 26px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .hfd-btn-scan {
+    background: var(--gold); color: var(--white); border: none;
+    padding: 13px 32px; font-family: 'DM Sans', sans-serif;
+    font-size: 15px; font-weight: 600; letter-spacing: 0.03em;
+    border-radius: 3px; cursor: pointer; transition: all 0.18s;
+    display: flex; align-items: center; gap: 9px;
+  }
+  .hfd-btn-scan:hover { background: var(--gold-light); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(200,150,46,0.32); }
+  .hfd-btn-scan:active { transform: translateY(0); }
+  .hfd-btn-scan:disabled { background: var(--gray-200); color: var(--gray-500); cursor: not-allowed; transform: none; box-shadow: none; }
+  .hfd-btn-clear {
+    background: none; border: 1.5px solid var(--gray-200); color: var(--gray-500);
+    padding: 12px 18px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+    border-radius: 3px; cursor: pointer; transition: all 0.14s;
+  }
+  .hfd-btn-clear:hover { border-color: var(--gray-700); color: var(--gray-700); }
+  .hfd-disclaimer { font-size: 11px; color: var(--gray-500); line-height: 1.5; margin-left: auto; max-width: 260px; text-align: right; }
+
+  /* ERROR */
+  .hfd-error {
+    display: none; margin: 0 28px 4px;
+    background: var(--red-bg); border-left: 4px solid var(--red);
+    padding: 12px 16px; border-radius: 2px; font-size: 13px; color: var(--red); line-height: 1.5;
+  }
+  .hfd-error.on { display: block; }
+
+  /* LOADING */
+  .hfd-loading { display: none; padding: 36px 28px; border-top: 1px solid var(--gray-200); text-align: center; }
+  .hfd-loading.on { display: block; }
+  .hfd-loading-label { font-size: 14px; color: var(--gray-700); font-weight: 500; margin-bottom: 16px; }
+  .hfd-bar-track { background: var(--gray-100); border-radius: 2px; height: 4px; overflow: hidden; max-width: 380px; margin: 0 auto 18px; }
+  .hfd-bar-fill { height: 100%; background: linear-gradient(90deg, var(--navy), var(--gold)); border-radius: 2px; animation: hfdSlide 1.5s ease-in-out infinite; width: 55%; }
+  @keyframes hfdSlide { 0% { transform: translateX(-110%); } 100% { transform: translateX(280%); } }
+  .hfd-steps { display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; }
+  .hfd-step { font-size: 12px; color: var(--gray-500); display: flex; align-items: center; gap: 5px; transition: color 0.2s; }
+  .hfd-step.on { color: var(--navy); font-weight: 600; }
+  .hfd-step.done { color: var(--green); }
+  .hfd-spin { width: 13px; height: 13px; border: 2px solid var(--gray-200); border-top-color: var(--navy); border-radius: 50%; animation: hfdSpin 0.75s linear infinite; display: inline-block; flex-shrink: 0; }
+  @keyframes hfdSpin { to { transform: rotate(360deg); } }
+
+  /* RESULTS */
+  .hfd-results { display: none; border-top: 1px solid var(--gray-200); animation: hfdUp 0.4s ease; }
+  .hfd-results.on { display: block; }
+  @keyframes hfdUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+  /* VERDICT */
+  .hfd-verdict { padding: 26px 28px; display: flex; align-items: center; gap: 18px; }
+  .hfd-verdict.low { background: var(--green-bg); border-left: 5px solid var(--green); }
+  .hfd-verdict.suspicious { background: var(--amber-bg); border-left: 5px solid var(--amber); }
+  .hfd-verdict.high { background: var(--red-bg); border-left: 5px solid var(--red); }
+  .hfd-verdict-icon { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; color: white; }
+  .hfd-verdict.low .hfd-verdict-icon { background: var(--green); }
+  .hfd-verdict.suspicious .hfd-verdict-icon { background: var(--amber); }
+  .hfd-verdict.high .hfd-verdict-icon { background: var(--red); }
+  .hfd-verdict-badge { font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 4px; }
+  .hfd-verdict.low .hfd-verdict-badge { color: var(--green); }
+  .hfd-verdict.suspicious .hfd-verdict-badge { color: var(--amber); }
+  .hfd-verdict.high .hfd-verdict-badge { color: var(--red); }
+  .hfd-verdict-title { font-family: 'Playfair Display', serif; font-size: 21px; font-weight: 700; color: var(--navy); margin-bottom: 3px; }
+  .hfd-verdict-sub { font-size: 13px; color: var(--gray-700); line-height: 1.5; }
+
+  /* METERS */
+  .hfd-meters { padding: 20px 28px 18px; border-bottom: 1px solid var(--gray-200); }
+  .hfd-meter-row { display: flex; align-items: center; gap: 14px; margin-bottom: 9px; }
+  .hfd-meter-label { font-size: 12px; font-weight: 600; color: var(--gray-700); width: 140px; flex-shrink: 0; }
+  .hfd-meter-track { flex: 1; height: 7px; background: var(--gray-100); border-radius: 4px; overflow: hidden; }
+  .hfd-meter-fill { height: 100%; border-radius: 4px; transition: width 1.1s cubic-bezier(.4,0,.2,1); width: 0; }
+  .hfd-meter-fill.low { background: var(--green); }
+  .hfd-meter-fill.medium { background: var(--amber); }
+  .hfd-meter-fill.high { background: var(--red); }
+  .hfd-meter-pct { font-size: 12px; font-weight: 600; color: var(--navy); width: 34px; text-align: right; flex-shrink: 0; }
+
+  /* FINDINGS */
+  .hfd-findings { padding: 20px 28px; border-bottom: 1px solid var(--gray-200); }
+  .hfd-section-title { font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gray-500); margin-bottom: 14px; }
+  .hfd-finding { display: flex; gap: 11px; margin-bottom: 13px; align-items: flex-start; }
+  .hfd-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+  .hfd-dot.red { background: var(--red); }
+  .hfd-dot.amber { background: var(--amber); }
+  .hfd-dot.green { background: var(--green); }
+  .hfd-finding-label { font-size: 13px; font-weight: 600; color: var(--navy); margin-bottom: 2px; }
+  .hfd-finding-desc { font-size: 13px; color: var(--gray-700); line-height: 1.55; }
+
+  /* ACTION */
+  .hfd-action { padding: 22px 28px; background: var(--navy); border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .hfd-action .hfd-section-title { color: rgba(255,255,255,0.45); }
+  .hfd-action-headline { font-family: 'Playfair Display', serif; font-size: 19px; font-weight: 700; color: var(--white); margin-bottom: 14px; }
+  .hfd-action-step { display: flex; gap: 11px; align-items: flex-start; margin-bottom: 10px; }
+  .hfd-action-num { width: 23px; height: 23px; background: var(--gold); color: var(--white); font-size: 11px; font-weight: 700; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .hfd-action-text { font-size: 13px; color: rgba(255,255,255,0.82); line-height: 1.55; }
+
+  /* EMAIL CAPTURE */
+  .hfd-email-capture { padding: 24px 28px; background: var(--gold-pale); border-bottom: 1px solid var(--gray-200); }
+  .hfd-email-hl { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700; color: var(--navy); margin-bottom: 5px; }
+  .hfd-email-sub { font-size: 13px; color: var(--gray-700); margin-bottom: 14px; line-height: 1.5; }
+  .hfd-email-row { display: flex; gap: 9px; flex-wrap: wrap; }
+  .hfd-email-input { flex: 1; min-width: 200px; padding: 10px 14px; border: 1.5px solid var(--gray-200); border-radius: 3px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--text); background: var(--white); }
+  .hfd-email-input:focus { outline: none; border-color: var(--navy); }
+  .hfd-btn-email { background: var(--navy); color: var(--white); border: none; padding: 10px 22px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; border-radius: 3px; cursor: pointer; transition: background 0.14s; white-space: nowrap; }
+  .hfd-btn-email:hover { background: var(--navy-light); }
+  .hfd-email-privacy { font-size: 11px; color: var(--gray-500); margin-top: 7px; }
+
+  /* CARD FOOTER */
+  .hfd-card-footer { padding: 18px 28px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+  .hfd-btn-again { background: none; border: 1.5px solid var(--navy); color: var(--navy); padding: 9px 18px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; border-radius: 3px; cursor: pointer; transition: all 0.14s; }
+  .hfd-btn-again:hover { background: var(--navy); color: var(--white); }
+  .hfd-share { font-size: 12px; color: var(--gray-500); display: flex; align-items: center; gap: 8px; }
+  .hfd-copy-btn { background: none; border: 1.5px solid var(--gray-200); padding: 5px 11px; border-radius: 3px; font-size: 12px; cursor: pointer; font-family: 'DM Sans', sans-serif; color: var(--gray-700); transition: all 0.14s; }
+  .hfd-copy-btn:hover { border-color: var(--navy); color: var(--navy); }
+
+  /* HOW IT WORKS */
+  .hfd-how { max-width: 800px; margin: 0 auto; padding: 0 20px 56px; }
+  .hfd-how-title { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; color: var(--navy); text-align: center; margin-bottom: 6px; }
+  .hfd-how-sub { font-size: 14px; color: var(--gray-500); text-align: center; margin-bottom: 30px; }
+  .hfd-how-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 16px; }
+  .hfd-how-card { background: var(--white); border: 1px solid var(--gray-200); border-radius: 3px; padding: 20px; }
+  .hfd-how-num { font-family: 'Playfair Display', serif; font-size: 38px; font-weight: 900; color: var(--gray-200); line-height: 1; margin-bottom: 6px; }
+  .hfd-how-card h3 { font-size: 14px; font-weight: 600; color: var(--navy); margin-bottom: 6px; }
+  .hfd-how-card p { font-size: 12px; color: var(--gray-700); line-height: 1.6; }
+
+  /* PAGE FOOTER */
+  .hfd-footer { background: var(--navy); padding: 24px 28px; text-align: center; border-top: 3px solid var(--gold); }
+  .hfd-footer p { font-size: 12px; color: rgba(255,255,255,0.38); line-height: 1.7; }
+  .hfd-footer strong { color: rgba(255,255,255,0.65); }
+
+  /* SHARE CARD */
+  .hfd-share-section { padding: 22px 28px; background: var(--off-white); border-bottom: 1px solid var(--gray-200); }
+  .hfd-share-section-title { font-size: 11px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gray-500); margin-bottom: 12px; }
+  .hfd-share-card-preview {
+    border-radius: 4px; overflow: hidden; margin-bottom: 14px;
+    box-shadow: 0 4px 20px rgba(10,30,61,0.18);
+    font-family: 'DM Sans', sans-serif;
+  }
+  .hfd-sc-header {
+    padding: 14px 18px 12px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .hfd-sc-logo { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.7); }
+  .hfd-sc-logo span { color: var(--gold); }
+  .hfd-sc-badge { font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 10px; letter-spacing: 0.06em; text-transform: uppercase; }
+  .hfd-sc-body { padding: 16px 18px 14px; }
+  .hfd-sc-verdict-line { font-size: 22px; font-weight: 900; line-height: 1.1; margin-bottom: 6px; font-family: 'Playfair Display', serif; }
+  .hfd-sc-subtitle { font-size: 12px; opacity: 0.75; line-height: 1.45; margin-bottom: 12px; }
+  .hfd-sc-meters { display: flex; flex-direction: column; gap: 5px; margin-bottom: 12px; }
+  .hfd-sc-meter-row { display: flex; align-items: center; gap: 8px; }
+  .hfd-sc-meter-label { font-size: 10px; width: 120px; flex-shrink: 0; opacity: 0.8; }
+  .hfd-sc-meter-track { flex: 1; height: 5px; border-radius: 3px; background: rgba(255,255,255,0.15); overflow: hidden; }
+  .hfd-sc-meter-fill { height: 100%; border-radius: 3px; }
+  .hfd-sc-meter-pct { font-size: 10px; font-weight: 700; width: 28px; text-align: right; opacity: 0.85; }
+  .hfd-sc-footer { padding: 10px 18px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.1); }
+  .hfd-sc-url { font-size: 10px; opacity: 0.5; }
+  .hfd-sc-powered { font-size: 9px; opacity: 0.45; letter-spacing: 0.08em; text-transform: uppercase; }
+
+  .hfd-share-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+  .hfd-share-btn {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 9px 16px; border-radius: 3px; border: none;
+    font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600;
+    cursor: pointer; transition: all 0.15s; text-decoration: none; color: white;
+  }
+  .hfd-share-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+  .hfd-share-btn.facebook { background: #1877F2; }
+  .hfd-share-btn.twitter  { background: #000000; }
+  .hfd-share-btn.linkedin { background: #0A66C2; }
+  .hfd-share-btn.sms      { background: #27AE60; }
+  .hfd-share-btn.download { background: var(--navy); }
+  .hfd-share-btn.copycard { background: var(--white); color: var(--navy); border: 1.5px solid var(--gray-200); }
+  .hfd-share-btn.copycard:hover { border-color: var(--navy); }
+
+  /* IMAGE UPLOAD */
+  .hfd-input-mode-toggle {
+    display: flex; gap: 0; margin-bottom: 16px;
+    border: 1.5px solid var(--gray-200); border-radius: 3px; overflow: hidden;
+    width: fit-content;
+  }
+  .hfd-mode-btn {
+    padding: 8px 18px; font-family: 'DM Sans', sans-serif;
+    font-size: 13px; font-weight: 500; cursor: pointer;
+    border: none; background: var(--white); color: var(--gray-700);
+    transition: all 0.14s; display: flex; align-items: center; gap: 6px;
+  }
+  .hfd-mode-btn:first-child { border-right: 1.5px solid var(--gray-200); }
+  .hfd-mode-btn.active { background: var(--navy); color: var(--white); }
+  .hfd-mode-btn:hover:not(.active) { background: var(--gray-100); }
+
+  .hfd-upload-zone {
+    border: 2px dashed var(--gray-200); border-radius: 3px;
+    background: var(--off-white); min-height: 175px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 10px; cursor: pointer; transition: all 0.18s;
+    position: relative; text-align: center; padding: 24px;
+  }
+  .hfd-upload-zone:hover, .hfd-upload-zone.drag-over {
+    border-color: var(--gold); background: var(--gold-pale);
+  }
+  .hfd-upload-zone input[type=file] {
+    position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+  }
+  .hfd-upload-icon { font-size: 36px; line-height: 1; }
+  .hfd-upload-title { font-size: 15px; font-weight: 600; color: var(--navy); }
+  .hfd-upload-sub { font-size: 12px; color: var(--gray-500); line-height: 1.5; }
+  .hfd-upload-btn-label {
+    background: var(--navy); color: var(--white);
+    padding: 8px 20px; border-radius: 3px;
+    font-size: 13px; font-weight: 600; font-family: 'DM Sans', sans-serif;
+    cursor: pointer; transition: background 0.14s; pointer-events: none;
+  }
+
+  .hfd-image-preview {
+    display: none; position: relative; margin-top: 0;
+    border: 1.5px solid var(--gray-200); border-radius: 3px; overflow: hidden;
+    background: var(--gray-100);
+  }
+  .hfd-image-preview.on { display: block; }
+  .hfd-image-preview img {
+    width: 100%; max-height: 320px; object-fit: contain;
+    display: block; background: #fff;
+  }
+  .hfd-image-preview-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 12px; background: var(--gray-100);
+    border-top: 1px solid var(--gray-200);
+  }
+  .hfd-image-name { font-size: 12px; color: var(--gray-700); font-weight: 500; }
+  .hfd-image-remove {
+    background: none; border: none; color: var(--red); font-size: 12px;
+    cursor: pointer; font-family: 'DM Sans', sans-serif; font-weight: 600; padding: 2px 6px;
+  }
+  .hfd-image-remove:hover { text-decoration: underline; }
+
+  @media (max-width: 580px) {
+    .hfd-input-mode-toggle { width: 100%; }
+    .hfd-mode-btn { flex: 1; justify-content: center; }
+  }
+
+  /* KEEP original mobile rules */
+    .hfd-hero { padding: 40px 18px 36px; }
+    .hfd-wrap { padding: 0 14px 40px; }
+    .hfd-card-header, .hfd-tabs-section, .hfd-input-section,
+    .hfd-actions, .hfd-meters, .hfd-findings, .hfd-action,
+    .hfd-email-capture, .hfd-card-footer { padding-left: 18px; padding-right: 18px; }
+    .hfd-verdict { flex-direction: column; gap: 10px; }
+    .hfd-actions { flex-direction: column; align-items: stretch; }
+    .hfd-btn-scan { justify-content: center; }
+    .hfd-disclaimer { max-width: 100%; text-align: left; margin-left: 0; }
+    .hfd-how { padding: 0 14px 40px; }
+    .hfd-meter-label { width: 110px; }
+  }
+
+  /* ── LEAD GATE ─────────────────────────────────────────────── */
+  .hfd-gate-wrap { display: none; margin: 0; }
+  .hfd-gate-wrap.on { display: block; }
+
+  .hfd-gate-preview { position: relative; border-radius: 6px; overflow: hidden; margin-bottom: 0; }
+  .hfd-gate-preview-inner { filter: blur(5px); pointer-events: none; user-select: none; opacity: 0.45; }
+  .hfd-gate-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, rgba(247,248,250,0) 0%, rgba(247,248,250,0.7) 35%, rgba(247,248,250,1) 75%);
+  }
+
+  .hfd-gate-card {
+    background: var(--navy);
+    border-radius: 6px;
+    margin-top: 12px;
+    overflow: hidden;
+    box-shadow: 0 6px 32px rgba(10,30,61,0.22);
+    border-top: 3px solid var(--gold);
+  }
+  .hfd-gate-top {
+    padding: 28px 32px 24px;
+    text-align: center;
+  }
+  .hfd-gate-lock {
+    width: 52px; height: 52px;
+    background: rgba(200,150,46,0.15);
+    border: 2px solid rgba(200,150,46,0.3);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; margin: 0 auto 14px;
+  }
+  .hfd-gate-eyebrow {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 8px;
+  }
+  .hfd-gate-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(18px, 2.5vw, 24px);
+    font-weight: 700; color: var(--white);
+    line-height: 1.2; margin-bottom: 8px;
+  }
+  .hfd-gate-sub {
+    font-size: 14px; color: rgba(255,255,255,0.55);
+    line-height: 1.6; max-width: 400px; margin: 0 auto;
+  }
+  .hfd-gate-checks {
+    display: flex; flex-wrap: wrap; gap: 8px 24px;
+    justify-content: center; margin: 18px 0 0;
+  }
+  .hfd-gate-check {
+    display: flex; align-items: center; gap: 7px;
+    font-size: 13px; color: rgba(255,255,255,0.72);
+  }
+  .hfd-gate-check::before {
+    content: '✓';
+    display: flex; align-items: center; justify-content: center;
+    width: 18px; height: 18px;
+    background: rgba(200,150,46,0.2); color: var(--gold);
+    border-radius: 50%; font-size: 10px; font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .hfd-gate-form {
+    background: var(--white);
+    padding: 24px 32px 28px;
+  }
+  .hfd-gate-form-title {
+    font-size: 13px; font-weight: 700; color: var(--gray-700);
+    margin-bottom: 16px; text-align: center;
+  }
+  .hfd-gate-row {
+    display: flex; gap: 12px; margin-bottom: 12px;
+  }
+  @media (max-width: 520px) {
+    .hfd-gate-row { flex-direction: column; }
+    .hfd-gate-top, .hfd-gate-form { padding-left: 20px; padding-right: 20px; }
+  }
+  .hfd-gate-input-wrap { flex: 1; }
+  .hfd-gate-label {
+    display: block;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--gray-500); margin-bottom: 5px;
+  }
+  .hfd-gate-input {
+    width: 100%; padding: 12px 14px;
+    border: 1.5px solid var(--gray-200); border-radius: 4px;
+    font-family: 'DM Sans', sans-serif; font-size: 14px;
+    color: var(--text); background: var(--off-white);
+    transition: border-color 0.14s;
+  }
+  .hfd-gate-input:focus { outline: none; border-color: var(--navy); background: #fff; }
+  .hfd-gate-btn {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    width: 100%; padding: 14px;
+    background: var(--gold); color: var(--white);
+    border: none; border-radius: 4px;
+    font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 700;
+    cursor: pointer; transition: all 0.16s; letter-spacing: 0.01em;
+  }
+  .hfd-gate-btn:hover { background: var(--gold-light); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(200,150,46,0.35); }
+  .hfd-gate-btn:disabled { background: var(--gray-200); color: var(--gray-500); transform: none; box-shadow: none; cursor: not-allowed; }
+  .hfd-gate-error {
+    font-size: 13px; color: var(--red);
+    margin-top: 8px; display: none;
+  }
+  .hfd-gate-error.on { display: block; }
+  .hfd-gate-privacy {
+    font-size: 11px; color: var(--gray-500);
+    text-align: center; margin-top: 10px; line-height: 1.5;
+  }
+  /* Compliance consent checkbox */
+  .hfd-gate-consent {
+    display: flex; align-items: flex-start; gap: 10px;
+    background: var(--gray-100); border-radius: 4px;
+    padding: 12px 14px; margin: 14px 0 16px;
+    border: 1.5px solid var(--gray-200);
+  }
+  .hfd-gate-consent input[type="checkbox"] {
+    width: 16px; height: 16px; flex-shrink: 0;
+    margin-top: 2px; accent-color: var(--navy); cursor: pointer;
+  }
+  .hfd-gate-consent-label {
+    font-size: 12px; color: var(--gray-700); line-height: 1.55; cursor: pointer;
+  }
+  .hfd-gate-consent-label strong { color: var(--text); }
+  /* Skip link */
+  .hfd-gate-divider {
+    display: flex; align-items: center; gap: 10px;
+    margin: 14px 0 10px;
+    font-size: 11px; color: var(--gray-500);
+  }
+  .hfd-gate-divider::before, .hfd-gate-divider::after {
+    content: ''; flex: 1; height: 1px; background: var(--gray-200);
+  }
+  .hfd-gate-skip {
+    display: block; text-align: center;
+    font-size: 13px; color: var(--gray-500);
+    text-decoration: none; cursor: pointer;
+    padding: 6px 0;
+    transition: color 0.14s;
+  }
+  .hfd-gate-skip:hover { color: var(--navy); text-decoration: underline; }
+  .hfd-gate-skip span { font-size: 11px; }
+
+  /* Full report hidden until gate cleared */
+  .hfd-full-report { display: none; }
+  .hfd-full-report.on { display: block; }
+
+  /* Top finding preview card */
+  .hfd-top-finding-card {
+    background: var(--white); border-radius: 6px; overflow: hidden;
+    box-shadow: 0 1px 8px rgba(10,30,61,0.07);
+    margin-bottom: 0;
+  }
+  .hfd-top-finding-header {
+    padding: 12px 20px; border-bottom: 1px solid var(--gray-100);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .hfd-top-finding-title { font-size: 13px; font-weight: 700; color: var(--navy); }
+  .hfd-top-finding-sub { font-size: 11px; color: var(--gray-500); margin-top: 1px; }
+  .hfd-top-finding-body { padding: 14px 20px; }
+
+
+  /* CONTEXT FIELD */
+  .hfd-context-wrap {
+    margin-top: 18px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: 6px;
+    overflow: hidden;
+    background: var(--white);
+    transition: border-color 0.14s;
+  }
+  .hfd-context-wrap:focus-within {
+    border-color: var(--navy);
+  }
+  .hfd-context-toggle {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 16px; cursor: pointer; user-select: none;
+    background: var(--off-white);
+  }
+  .hfd-context-toggle:hover { background: var(--gray-100); }
+  .hfd-context-toggle-left {
+    display: flex; align-items: center; gap: 9px;
+  }
+  .hfd-context-label {
+    font-size: 13px; font-weight: 600; color: var(--navy);
+  }
+  .hfd-context-badge {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; padding: 2px 7px; border-radius: 10px;
+    background: var(--gold-pale); color: var(--gold);
+  }
+  .hfd-context-sub {
+    font-size: 12px; color: var(--gray-500);
+  }
+  .hfd-context-chevron {
+    font-size: 11px; color: var(--gray-500);
+    transition: transform 0.2s; display: inline-block;
+  }
+  .hfd-context-chevron.open { transform: rotate(180deg); }
+  .hfd-context-body {
+    display: none; padding: 14px 16px 16px;
+    border-top: 1px solid var(--gray-200);
+    background: var(--white);
+  }
+  .hfd-context-body.open { display: block; }
+  .hfd-context-hint {
+    font-size: 11px; color: var(--gray-500);
+    margin-bottom: 10px; line-height: 1.55;
+  }
+  .hfd-context-hint strong { color: var(--gray-700); }
+  .hfd-context-pills {
+    display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px;
+  }
+  .hfd-context-pill {
+    padding: 5px 11px; border-radius: 20px; font-size: 12px; font-weight: 500;
+    border: 1.5px solid var(--gray-200); background: var(--off-white);
+    color: var(--gray-700); cursor: pointer; transition: all 0.12s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .hfd-context-pill:hover {
+    border-color: var(--navy); color: var(--navy); background: #EEF1F7;
+  }
+  .hfd-context-textarea {
+    width: 100%; min-height: 80px; padding: 11px 13px;
+    border: 1.5px solid var(--gray-200); border-radius: 4px;
+    font-family: 'DM Sans', sans-serif; font-size: 13px;
+    color: var(--text); background: var(--off-white); resize: vertical;
+    line-height: 1.55; transition: border-color 0.14s;
+  }
+  .hfd-context-textarea:focus {
+    outline: none; border-color: var(--navy); background: var(--white);
+  }
+  .hfd-context-charcount {
+    font-size: 11px; color: var(--gray-500); text-align: right;
+    margin-top: 5px;
+  }
+
+
+  /* ── FRAUD ALERT PAGE (shared link view) ──────────────────── */
+  .hfd-alert-page { display: none; }
+  .hfd-alert-page.on { display: block; }
+  .hfd-scanner-wrap.hidden { display: none; }
+
+  .hfd-alert-hero {
+    background: var(--navy); padding: 32px 40px 28px; text-align: center; position: relative; overflow: hidden;
+  }
+  .hfd-alert-hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 100%, rgba(200,150,46,0.09) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hfd-alert-eyebrow {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 10px;
+  }
+  .hfd-alert-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(22px, 3.5vw, 36px); font-weight: 900;
+    color: var(--white); line-height: 1.15; margin-bottom: 8px;
+  }
+  .hfd-alert-title span { color: var(--gold); }
+  .hfd-alert-sub {
+    font-size: 14px; color: rgba(255,255,255,0.55); margin-bottom: 20px; line-height: 1.6;
+  }
+  .hfd-alert-meta {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 11px; color: rgba(255,255,255,0.35);
+    background: rgba(255,255,255,0.06); border-radius: 20px; padding: 5px 14px;
+  }
+  .hfd-alert-meta-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+
+  .hfd-alert-body { max-width: 700px; margin: 0 auto; padding: 24px 20px 40px; }
+
+  .hfd-alert-verdict-card {
+    border-radius: 8px; overflow: hidden; margin-bottom: 16px;
+    box-shadow: 0 2px 16px rgba(10,30,61,0.10);
+  }
+  .hfd-alert-verdict-card.high { border-left: 5px solid var(--red); }
+  .hfd-alert-verdict-card.suspicious { border-left: 5px solid var(--amber); }
+  .hfd-alert-verdict-card.low { border-left: 5px solid var(--green); }
+  .hfd-alert-verdict-inner {
+    background: var(--white); padding: 20px 22px; display: flex; gap: 16px; align-items: flex-start;
+  }
+  .hfd-alert-verdict-icon {
+    font-size: 28px; flex-shrink: 0; margin-top: 2px;
+  }
+  .hfd-alert-verdict-badge {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 3px 9px; border-radius: 12px; display: inline-block; margin-bottom: 5px;
+  }
+  .high .hfd-alert-verdict-badge { background: var(--red-bg); color: var(--red); }
+  .suspicious .hfd-alert-verdict-badge { background: var(--amber-bg); color: var(--amber); }
+  .low .hfd-alert-verdict-badge { background: var(--green-bg); color: var(--green); }
+  .hfd-alert-verdict-title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+  .hfd-alert-verdict-sub { font-size: 13px; color: var(--gray-500); line-height: 1.5; }
+
+  .hfd-alert-section { background: var(--white); border-radius: 8px; padding: 20px 22px; margin-bottom: 16px; box-shadow: 0 2px 12px rgba(10,30,61,0.07); }
+  .hfd-alert-section-title {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 14px; display: flex; align-items: center; gap: 7px;
+  }
+  .hfd-alert-section-title::after { content: ''; flex: 1; height: 1px; background: var(--gray-200); }
+
+  .hfd-alert-excerpt {
+    font-size: 13px; line-height: 1.7; color: var(--gray-700);
+    background: var(--off-white); border-left: 3px solid var(--gray-200);
+    padding: 12px 16px; border-radius: 0 4px 4px 0;
+    font-style: italic; white-space: pre-wrap; word-break: break-word;
+  }
+  .hfd-alert-redact-note {
+    font-size: 11px; color: var(--gray-500); margin-top: 8px; font-style: normal;
+    display: flex; align-items: center; gap: 5px;
+  }
+
+  .hfd-alert-finding {
+    display: flex; gap: 12px; padding: 11px 0;
+    border-bottom: 1px solid var(--gray-100);
+  }
+  .hfd-alert-finding:last-child { border-bottom: none; padding-bottom: 0; }
+  .hfd-alert-finding-dot {
+    width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 5px;
+  }
+  .hfd-alert-finding-dot.red { background: var(--red); }
+  .hfd-alert-finding-dot.amber { background: var(--amber); }
+  .hfd-alert-finding-dot.green { background: var(--green); }
+  .hfd-alert-finding-label { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 2px; }
+  .hfd-alert-finding-desc { font-size: 13px; color: var(--gray-700); line-height: 1.55; }
+
+  .hfd-alert-cta {
+    background: var(--navy); border-radius: 8px; padding: 24px 28px; text-align: center;
+    margin-bottom: 16px;
+  }
+  .hfd-alert-cta-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--white); margin-bottom: 6px; }
+  .hfd-alert-cta-sub { font-size: 13px; color: rgba(255,255,255,0.55); margin-bottom: 18px; line-height: 1.5; }
+  .hfd-alert-cta-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 13px 28px; background: var(--gold); color: var(--white);
+    border: none; border-radius: 4px; font-family: 'DM Sans', sans-serif;
+    font-size: 14px; font-weight: 700; cursor: pointer; text-decoration: none;
+    transition: background 0.15s;
+  }
+  .hfd-alert-cta-btn:hover { background: var(--gold-light); }
+
+  .hfd-alert-share-bar {
+    background: var(--white); border-radius: 8px; padding: 18px 22px;
+    box-shadow: 0 2px 12px rgba(10,30,61,0.07); margin-bottom: 16px;
+  }
+  .hfd-alert-share-title { font-size: 13px; font-weight: 700; color: var(--navy); margin-bottom: 12px; }
+  .hfd-alert-share-btns { display: flex; flex-wrap: wrap; gap: 8px; }
+  .hfd-alert-share-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 9px 16px; border-radius: 4px; border: none;
+    font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 700;
+    cursor: pointer; color: white; transition: opacity 0.14s;
+  }
+  .hfd-alert-share-btn:hover { opacity: 0.85; }
+  .hfd-alert-share-btn.fb { background: #1877F2; }
+  .hfd-alert-share-btn.tw { background: #000; }
+  .hfd-alert-share-btn.li { background: #0A66C2; }
+  .hfd-alert-share-btn.sms { background: #27AE60; }
+  .hfd-alert-share-btn.copy { background: var(--navy); }
+
+
+  /* ── NEW SHARE PANEL ──────────────────────────────────────── */
+
+
+
+
+
+  /* Image preview box */
+
+
+
+
+
+
+
+  /* Copy + instruction row */
+
+
+
+
+
+
+
+
+  /* Platform buttons */
+
+
+
+
+
+
+
+
+
+
+
+</style>
+</head>
+<body>
+
+<!-- FRAUD ALERT PAGE (shown when ?alert= param present) -->
+<div class="hfd-alert-page" id="hfdAlertPage">
+
+  <div class="hfd-alert-hero">
+    <div class="hfd-alert-eyebrow">HFD&#8482; FraudScan &#8212; Community Fraud Alert</div>
+    <h1 class="hfd-alert-title">Someone shared this <span>fraud alert</span><br>to protect you</h1>
+    <p class="hfd-alert-sub">A real message was scanned and flagged. Read the findings below, then scan your own suspicious messages free.</p>
+    <div class="hfd-alert-meta">
+      <div class="hfd-alert-meta-dot"></div>
+      <span id="alertMetaText">Analyzed by HFD&#8482; FraudScan &#8183; AI-powered &#8183; FBI IC3 data</span>
+    </div>
+  </div>
+
+  <div class="hfd-alert-body">
+
+    <!-- Verdict -->
+    <div class="hfd-alert-verdict-card" id="alertVerdictCard">
+      <div class="hfd-alert-verdict-inner">
+        <div class="hfd-alert-verdict-icon" id="alertVerdictIcon"></div>
+        <div>
+          <div class="hfd-alert-verdict-badge" id="alertVerdictBadge"></div>
+          <div class="hfd-alert-verdict-title" id="alertVerdictTitle"></div>
+          <div class="hfd-alert-verdict-sub" id="alertVerdictSub"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Redacted message excerpt -->
+    <div class="hfd-alert-section" id="alertExcerptSection">
+      <div class="hfd-alert-section-title">Message Excerpt</div>
+      <div class="hfd-alert-excerpt" id="alertExcerpt"></div>
+      <div class="hfd-alert-redact-note">&#128274; Personal information (names, emails, phone numbers) has been redacted for privacy.</div>
+    </div>
+
+    <!-- Findings -->
+    <div class="hfd-alert-section">
+      <div class="hfd-alert-section-title">Fraud Findings</div>
+      <div id="alertFindings"></div>
+    </div>
+
+    <!-- CTA -->
+    <div class="hfd-alert-cta">
+      <div class="hfd-alert-cta-title">Received something similar?</div>
+      <div class="hfd-alert-cta-sub">Scan any suspicious email, text, letter, or image/screenshot free &#8212; results in 30 seconds. Powered by AI and FBI IC3 fraud data.</div>
+      <a class="hfd-alert-cta-btn" href="#" onclick="hfdShowScanner()">
+        <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1L1.5 3.5V7.5C1.5 11 4 13.5 7 14C10 13.5 12.5 11 12.5 7.5V3.5L7 1Z" stroke="white" stroke-width="1.2"/></svg>
+        Scan My Message Free
+      </a>
+    </div>
+
+    <!-- Re-share -->
+    <div class="hfd-alert-share-bar">
+      <div class="hfd-alert-share-title">&#128172; Share this alert &#8212; warn someone you know</div>
+      <div class="hfd-alert-share-btns">
+        <button class="hfd-alert-share-btn fb" onclick="alertShare('facebook')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="white"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          Facebook
+        </button>
+        <button class="hfd-alert-share-btn tw" onclick="alertShare('twitter')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="white"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          X / Twitter
+        </button>
+        <button class="hfd-alert-share-btn li" onclick="alertShare('linkedin')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="white"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          LinkedIn
+        </button>
+        <button class="hfd-alert-share-btn sms" onclick="alertShare('sms')">&#128172; Text</button>
+        <button class="hfd-alert-share-btn copy" id="alertCopyBtn" onclick="alertShare('copy')">&#128279; Copy Link</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hfd-hero">
+  <div class="hfd-eyebrow">Free Tool · No Account Required · Powered by Home Fraud Defense™ AI</div>
+  <h1>Is This Message <span>Trying to Scam You?</span></h1>
+  <p class="hfd-hero-sub">Paste any suspicious message or upload an image or screenshot. Our AI analyzes it against known real estate and consumer fraud patterns — and tells you exactly what to do.</p>
+  <div class="hfd-stats">
+    <div>
+      <div class="hfd-stat-num">$173.6M</div>
+      <div class="hfd-stat-label">Real estate fraud last year</div>
+    </div>
+    <div>
+      <div class="hfd-stat-num">72%</div>
+      <div class="hfd-stat-label">Wire fraud funds never recovered</div>
+    </div>
+    <div>
+      <div class="hfd-stat-num">AI-Driven</div>
+      <div class="hfd-stat-label">Fastest-growing fraud vector</div>
+    </div>
+  </div>
+</div>
+
+<!-- SCANNER CARD -->
+<div class="hfd-wrap hfd-scanner-wrap">
+  <div class="hfd-card">
+
+    <div class="hfd-card-header">
+      <div class="hfd-shield">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M10 2L3 5V10C3 14 6 17.5 10 18.5C14 17.5 17 14 17 10V5L10 2Z" stroke="#C8962E" stroke-width="1.3" fill="rgba(200,150,46,0.12)"/>
+          <path d="M6.5 10L9 12.5L13.5 7.5" stroke="#C8962E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div>
+        <h2>HFD™ Fraud Scanner</h2>
+        <p>Emails · Texts · Letters · Phone Scripts · Social Media · Images/Screenshots</p>
+      </div>
+    </div>
+
+    <!-- TABS -->
+    <div class="hfd-tabs-section">
+      <div class="hfd-field-label">What type of message are you scanning?</div>
+      <div class="hfd-tabs">
+        <button class="hfd-tab active" onclick="hfdTab(this,'email')">📧 Email</button>
+        <button class="hfd-tab" onclick="hfdTab(this,'text')">💬 Text / SMS</button>
+        <button class="hfd-tab" onclick="hfdTab(this,'letter')">📄 Letter / Document</button>
+        <button class="hfd-tab" onclick="hfdTab(this,'phone')">📞 Phone / Voicemail</button>
+        <button class="hfd-tab" onclick="hfdTab(this,'social')">📱 Social Media</button>
+      </div>
+    </div>
+
+    <!-- INPUT MODE TOGGLE + INPUT -->
+    <div class="hfd-input-section" style="margin-top:18px">
+
+      <!-- Mode toggle: Text vs Image -->
+      <div class="hfd-input-mode-toggle">
+        <button class="hfd-mode-btn active" id="hfdModeText" onclick="hfdSetMode('text')">
+          ✏️ Paste Text
+        </button>
+        <button class="hfd-mode-btn" id="hfdModeImage" onclick="hfdSetMode('image')">
+          🖼️ Upload Image/Screenshot
+        </button>
+      </div>
+
+      <!-- TEXT INPUT -->
+      <div id="hfdTextInputWrap">
+        <div class="hfd-char-row">
+          <div class="hfd-field-label" style="margin:0">Paste the full message here</div>
+          <span class="hfd-char-count" id="hfdCharCount">0 characters</span>
+        </div>
+        <textarea class="hfd-textarea" id="hfdInput" oninput="hfdUpdateChar()"
+          placeholder="Paste the complete message, email, letter, or script you want analyzed. Include as much text as possible for the most accurate results.&#10;&#10;Example: 'URGENT: Your property deed has been flagged for transfer. Call within 24 hours or lose ownership...'">
+        </textarea>
+        <button class="hfd-example-link" onclick="hfdLoadExample()">↗ Load a sample suspicious message to test the scanner</button>
+      </div>
+
+      <!-- IMAGE UPLOAD -->
+      <div id="hfdImageInputWrap" style="display:none">
+        <div class="hfd-field-label" style="margin-bottom:10px">Upload an image or screenshot of the suspicious message</div>
+
+        <!-- Drop zone (hidden when preview shown) -->
+        <div class="hfd-upload-zone" id="hfdDropZone"
+          ondragover="hfdDragOver(event)" ondragleave="hfdDragLeave(event)" ondrop="hfdDrop(event)">
+          <input type="file" accept="image/png,image/jpeg,image/webp,image/gif" id="hfdFileInput" onchange="hfdFileSelected(event)"/>
+          <div class="hfd-upload-icon">📸</div>
+          <div class="hfd-upload-title">Drop your image or screenshot here</div>
+          <div class="hfd-upload-sub">or click to browse · PNG, JPG, WEBP · Max 5MB<br>Works with images or screenshots of emails, texts, letters, or any suspicious message</div>
+          <div class="hfd-upload-btn-label">Choose File</div>
+        </div>
+
+        <!-- Image preview -->
+        <div class="hfd-image-preview" id="hfdImagePreview">
+          <img id="hfdPreviewImg" src="" alt="Image/Screenshot preview"/>
+          <div class="hfd-image-preview-bar">
+            <span class="hfd-image-name" id="hfdImageName"></span>
+            <button class="hfd-image-remove" onclick="hfdRemoveImage()">✕ Remove</button>
+          </div>
+        </div>
+
+        <div style="margin-top:10px;font-size:12px;color:var(--gray-500);line-height:1.5">
+          💡 <strong>Tip:</strong> Take an image or screenshot of the suspicious email, text message, or letter and upload it here. The AI will read all text in the image and analyze it for fraud.
+        </div>
+      </div>
+
+    </div>
+
+
+    <!-- BACKGROUND CONTEXT (OPTIONAL) -->
+    <div class="hfd-context-wrap" id="hfdContextWrap">
+      <div class="hfd-context-toggle" onclick="hfdToggleContext()">
+        <div class="hfd-context-toggle-left">
+          <span style="font-size:16px">💡</span>
+          <div>
+            <div class="hfd-context-label">Add Background Context <span class="hfd-context-badge">Optional</span></div>
+            <div class="hfd-context-sub">Help the AI understand your situation for a more accurate analysis</div>
+          </div>
+        </div>
+        <span class="hfd-context-chevron" id="hfdContextChevron">▼</span>
+      </div>
+      <div class="hfd-context-body" id="hfdContextBody">
+        <div class="hfd-context-hint">
+          <strong>Tell us what you already know.</strong> For example: who you were expecting to hear from, what transaction is in progress, or why this message caught your attention. The AI uses this to factor in your specific situation — making findings more precise and the suggested reply more relevant.
+        </div>
+        <div class="hfd-context-pills">
+          <button class="hfd-context-pill" onclick="hfdContextPill(this, 'I am a real estate agent working on an active transaction.')">Real estate agent</button>
+          <button class="hfd-context-pill" onclick="hfdContextPill(this, 'I am a homebuyer currently in escrow and expecting closing instructions.')">Homebuyer in escrow</button>
+          <button class="hfd-context-pill" onclick="hfdContextPill(this, 'I am a homeowner who was not expecting any contact about my property.')">Homeowner — unsolicited</button>
+          <button class="hfd-context-pill" onclick="hfdContextPill(this, 'I am a mortgage lender or loan officer reviewing a client communication.')">Lender / loan officer</button>
+          <button class="hfd-context-pill" onclick="hfdContextPill(this, 'I am a title officer or escrow agent reviewing a wire instruction.')">Title / escrow officer</button>
+          <button class="hfd-context-pill" onclick="hfdContextPill(this, 'I received this out of nowhere with no prior relationship or transaction.')">No prior contact</button>
+          <button class="hfd-context-pill" onclick="hfdContextPill(this, 'I am a senior homeowner and did not request any property services.')">Senior homeowner</button>
+          <button class="hfd-context-pill" onclick="hfdContextPill(this, 'I am a property investor managing multiple rentals.')">Property investor</button>
+        </div>
+        <textarea
+          class="hfd-context-textarea"
+          id="hfdContext"
+          oninput="hfdContextChar()"
+          maxlength="600"
+          placeholder="Example: I'm a buyer agent with a closing scheduled tomorrow. My title company is Fidelity National. I was expecting wire instructions but this email came from a different address than usual and the account number looks different from the draft HUD I already received."
+        ></textarea>
+        <div class="hfd-context-charcount"><span id="hfdContextCount">0</span> / 600</div>
+      </div>
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="hfd-actions">
+      <button class="hfd-btn-scan" id="hfdScanBtn" onclick="hfdRunScan()">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+          <path d="M7.5 1L1.5 3.5V7.5C1.5 11 4 13.8 7.5 14.5C11 13.8 13.5 11 13.5 7.5V3.5L7.5 1Z" stroke="white" stroke-width="1.2"/>
+          <path d="M5 7.5L6.8 9.3L10.5 5.5" stroke="white" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+        Analyze for Fraud
+      </button>
+      <button class="hfd-btn-clear" onclick="hfdClear()">Clear</button>
+      <div class="hfd-disclaimer">Educational analysis only. Not legal or financial advice. Always consult a qualified professional for important decisions.</div>
+    </div>
+
+    <!-- ERROR -->
+    <div class="hfd-error" id="hfdError"></div>
+
+    <!-- LOADING -->
+    <div class="hfd-loading" id="hfdLoading">
+      <div class="hfd-loading-label">Analyzing message for fraud indicators…</div>
+      <div class="hfd-bar-track"><div class="hfd-bar-fill"></div></div>
+      <div class="hfd-steps">
+        <div class="hfd-step" id="hfdStep0">Scanning urgency signals</div>
+        <div class="hfd-step" id="hfdStep1">Checking payment patterns</div>
+        <div class="hfd-step" id="hfdStep2">Analyzing identity claims</div>
+        <div class="hfd-step" id="hfdStep3">Matching fraud patterns</div>
+      </div>
+    </div>
+
+    <!-- RESULTS -->
+    <div class="hfd-results" id="hfdResults">
+
+      <!-- STEP 1: Verdict banner — always shown free -->
+      <div class="hfd-verdict" id="hfdVerdictBanner">
+        <div class="hfd-verdict-icon" id="hfdVerdictIcon"></div>
+        <div>
+          <div class="hfd-verdict-badge" id="hfdVerdictBadge"></div>
+          <div class="hfd-verdict-title" id="hfdVerdictTitle"></div>
+          <div class="hfd-verdict-sub" id="hfdVerdictSub"></div>
+        </div>
+      </div>
+
+      <!-- STEP 1: Top finding — always shown free -->
+      <div class="hfd-top-finding-card" id="hfdTopFindingCard">
+        <div class="hfd-top-finding-header">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2L2 4.5V8C2 11 4 13.2 7 14C10 13.2 12 11 12 8V4.5L7 2Z" stroke="#C8962E" stroke-width="1.2"/></svg>
+          <div>
+            <div class="hfd-top-finding-title">Top Finding</div>
+            <div class="hfd-top-finding-sub">1 of your findings — enter your info below to unlock all</div>
+          </div>
+        </div>
+        <div class="hfd-top-finding-body" id="hfdTopFindingBody"></div>
+      </div>
+
+      <!-- STEP 2: Gate — blurred preview + lead capture form -->
+      <div class="hfd-gate-wrap" id="hfdGateWrap">
+
+        <!-- Soft gate: NO blurred preview. Meters + findings are fully visible above.
+             This card replaces only the action steps section. -->
+        <div class="hfd-gate-card">
+          <div class="hfd-gate-top">
+            <div class="hfd-gate-lock">🔓</div>
+            <div class="hfd-gate-eyebrow">Your Action Plan Is Ready</div>
+            <div class="hfd-gate-title">What should you do right now?</div>
+            <div class="hfd-gate-sub">Enter your name and email to unlock your personalized step-by-step action plan — exactly what to do next based on what was found.</div>
+            <div class="hfd-gate-checks">
+              <div class="hfd-gate-check">Step-by-step action plan</div>
+              <div class="hfd-gate-check">Who to report this to</div>
+              <div class="hfd-gate-check">How to protect yourself now</div>
+              <div class="hfd-gate-check">100% free — no account needed</div>
+            </div>
+          </div>
+          <div class="hfd-gate-form">
+            <div class="hfd-gate-form-title">Free — takes 5 seconds</div>
+            <div class="hfd-gate-row">
+              <div class="hfd-gate-input-wrap">
+                <label class="hfd-gate-label" for="hfdGateName">First Name</label>
+                <input class="hfd-gate-input" type="text" id="hfdGateName" placeholder="Jane" autocomplete="given-name"/>
+              </div>
+              <div class="hfd-gate-input-wrap">
+                <label class="hfd-gate-label" for="hfdGateEmail">Email Address</label>
+                <input class="hfd-gate-input" type="email" id="hfdGateEmail" placeholder="jane@email.com" autocomplete="email"/>
+              </div>
+            </div>
+
+            <!-- CAN-SPAM / CASL compliant opt-in — unchecked by default, clearly optional -->
+            <div class="hfd-gate-consent">
+              <input type="checkbox" id="hfdConsentEmail" name="hfdConsentEmail"/>
+              <label class="hfd-gate-consent-label" for="hfdConsentEmail">
+                <strong>Optional:</strong> Email me a copy of this report and send me occasional fraud alerts and tips from Home Fraud Defense™. You can unsubscribe at any time. We never sell your data.
+              </label>
+            </div>
+
+            <div class="hfd-gate-error" id="hfdGateError"></div>
+            <button class="hfd-gate-btn" id="hfdGateBtn" onclick="hfdUnlockReport()">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L1.5 3.5V7.5C1.5 11 4 13.5 7 14C10 13.5 12.5 11 12.5 7.5V3.5L7 1Z" stroke="white" stroke-width="1.2"/></svg>
+              Show My Action Plan
+            </button>
+
+            <div class="hfd-gate-privacy">
+              By entering your info you agree to our <a href="/privacy-policy" target="_blank" style="color:var(--gray-500)">Privacy Policy</a>.
+              Home Fraud Defense™ · 7865 W Bell Rd #1070, Peoria AZ 85382.
+            </div>
+
+            <div class="hfd-gate-divider">or</div>
+            <a class="hfd-gate-skip" onclick="hfdSkipGate()" style="font-size:15px;font-weight:600;color:var(--navy);">
+              Show me the action plan without providing my email &nbsp;<span style="font-size:13px;font-weight:400;color:var(--gray-500)">(report won't be emailed to you)</span>
+            </a>
+          </div>
+        </div>
+      </div><!-- /gate -->
+
+      <!-- Email sent confirmation banner (shown only when user opted in) -->
+      <div id="hfdEmailSentBanner" style="display:none;align-items:center;gap:12px;background:#EAF5F0;border:1.5px solid #B2DFCE;border-radius:6px;padding:13px 18px;margin:0 0 16px;font-size:13px;color:#1A5C3A;line-height:1.5;">
+        <span style="font-size:20px;flex-shrink:0;">✉️</span>
+        <span>A copy of this report is on its way to <strong class="hfd-email-banner-addr"></strong>. Check your inbox in a few minutes. <span style="color:#4A8A6A;">(If you don't see it, check your spam folder.)</span></span>
+      </div>
+
+      <!-- STEP 2: Full report — revealed after gate cleared -->
+      <div class="hfd-full-report" id="hfdFullReport">
+
+        <div class="hfd-meters">
+          <div class="hfd-section-title">Risk Indicators</div>
+          <div id="hfdMeters"></div>
+        </div>
+
+        <div class="hfd-findings">
+          <div class="hfd-section-title">Detailed Analysis</div>
+          <div id="hfdFindings"></div>
+        </div>
+
+        <div class="hfd-action">
+          <div class="hfd-section-title">Recommended Action</div>
+          <div class="hfd-action-headline" id="hfdActionHl"></div>
+          <div id="hfdActionSteps"></div>
+        </div>
+
+        <!-- SUGGESTED REPLY — shown only when context provided -->
+        <div id="hfdReplyWrap" style="display:none;margin-top:12px;background:var(--white);border-radius:6px;overflow:hidden;box-shadow:0 1px 8px rgba(10,30,61,0.07);border-left:4px solid var(--gold)">
+          <div style="padding:14px 20px 10px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+            <div>
+              <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:2px">&#128172; Suggested Reply</div>
+              <div style="font-size:11px;color:var(--gray-500)">Based on your background context — edit before sending</div>
+            </div>
+            <button onclick="hfdCopyReply()" id="hfdCopyReplyBtn"
+              style="padding:7px 14px;background:var(--navy);color:white;border:none;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0">
+              Copy Reply
+            </button>
+          </div>
+          <textarea id="hfdSuggestedReply"
+            style="width:100%;min-height:110px;padding:12px 20px 16px;border:none;border-top:1px solid var(--gray-200);font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);background:var(--off-white);resize:vertical;line-height:1.6;outline:none"
+            placeholder="Suggested reply will appear here after analysis…"></textarea>
+        </div>
+
+      </div><!-- /fullReport -->
+
+      <div class="hfd-card-footer">
+        <button class="hfd-btn-again" onclick="hfdScanAgain()">&#8592; Scan Another Message</button>
+        <div class="hfd-share">
+          <span>Share with someone at risk:</span>
+          <button class="hfd-copy-btn" onclick="hfdCopyLink(event)">Copy Link</button>
+        </div>
+      </div>
+
+    </div><!-- /results -->
+  </div><!-- /card -->
+</div><!-- /wrap -->
+
+<!-- ALWAYS-VISIBLE REPORT BAR -->
+<div style="max-width:760px;margin:0 auto;padding:0 20px 10px">
+  <div style="background:#fff;border:2px solid #C0392B;border-radius:4px;padding:18px 24px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;justify-content:center;text-align:center;flex-direction:column">
+      <span style="font-size:24px">🚨</span>
+      <div>
+        <div style="font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:#0A1E3D">Already a victim? Report it officially.</div>
+        <div style="font-size:13px;color:#3D4B5C;margin-top:4px">Filing a report with federal agencies creates a case record and helps law enforcement track fraud patterns nationally.</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:center">
+      <a href="https://www.ic3.gov" target="_blank" rel="noopener"
+        style="display:inline-flex;align-items:center;gap:6px;padding:10px 20px;background:#0A1E3D;color:white;border-radius:3px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;text-decoration:none;transition:background 0.14s"
+        onmouseover="this.style.background='#1a3a5c'" onmouseout="this.style.background='#0A1E3D'">
+        🔵 Report to FBI IC3
+      </a>
+      <a href="https://reportfraud.ftc.gov" target="_blank" rel="noopener"
+        style="display:inline-flex;align-items:center;gap:6px;padding:10px 20px;background:#0A1E3D;color:white;border-radius:3px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;text-decoration:none;transition:background 0.14s"
+        onmouseover="this.style.background='#1a3a5c'" onmouseout="this.style.background='#0A1E3D'">
+        🔴 Report to FTC
+      </a>
+      <a href="https://www.identitytheft.gov" target="_blank" rel="noopener"
+        style="display:inline-flex;align-items:center;gap:6px;padding:10px 20px;background:#0A1E3D;color:white;border-radius:3px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;text-decoration:none;transition:background 0.14s"
+        onmouseover="this.style.background='#1a3a5c'" onmouseout="this.style.background='#0A1E3D'">
+        🟢 IdentityTheft.gov
+      </a>
+    </div>
+    <div style="text-align:center;margin-top:10px;font-size:12px;color:#8A95A3">All links open the official government websites.</div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="hfd-how">
+  <h2 class="hfd-how-title">How the Scanner Works</h2>
+  <p class="hfd-how-sub">Powered by Home Fraud Defense™ AI · Cross-referenced with FBI IC3, FTC & FinCEN fraud data</p>
+  <div class="hfd-how-grid">
+    <div class="hfd-how-card">
+      <div class="hfd-how-num">01</div>
+      <h3>Paste Any Message</h3>
+      <p>Emails, texts, letters, voicemail scripts, or social messages — any suspicious communication you've received.</p>
+    </div>
+    <div class="hfd-how-card">
+      <div class="hfd-how-num">02</div>
+      <h3>AI Fraud Analysis</h3>
+      <p>Our AI scans for urgency tactics, impersonation signals, wire fraud patterns, deed fraud language, and payment pressure.</p>
+    </div>
+    <div class="hfd-how-card">
+      <div class="hfd-how-num">03</div>
+      <h3>Clear Risk Verdict</h3>
+      <p>You receive a plain-English Low / Suspicious / High risk rating with a breakdown of every flag detected.</p>
+    </div>
+    <div class="hfd-how-card">
+      <div class="hfd-how-num">04</div>
+      <h3>Specific Next Steps</h3>
+      <p>We tell you exactly what to do — whether to ignore, verify, report, or escalate — based on what the AI found.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SHARE THIS SCANNER -->
+<div style="max-width:800px;margin:0 auto;padding:0 20px 48px">
+  <div style="background:var(--navy);border-radius:4px;padding:36px 32px;text-align:center;position:relative;overflow:hidden;border-top:4px solid var(--gold)">
+    <div style="position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 110%,rgba(200,150,46,0.10) 0%,transparent 70%);pointer-events:none"></div>
+    <div style="font-size:11px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:12px">Free Tool · No Account Required</div>
+    <h2 style="font-family:'Playfair Display',serif;font-size:clamp(22px,3.5vw,32px);font-weight:900;color:white;line-height:1.15;margin-bottom:12px">Know Someone Who Could Be a Target?<br><span style="color:var(--gold)">Share HFD™ FraudScan.</span></h2>
+    <p style="font-size:14px;color:rgba(255,255,255,0.62);max-width:500px;margin:0 auto 28px;line-height:1.65">Real estate fraud targets homeowners, seniors, first-time buyers, and agents every day. Share this free scanner and help someone protect themselves before it's too late.</p>
+
+    <!-- Share buttons -->
+    <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:20px">
+      <button onclick="hfdScannerShareFacebook()"
+        style="display:inline-flex;align-items:center;gap:7px;padding:11px 20px;background:#1877F2;color:white;border:none;border-radius:3px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.15s"
+        onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 14px rgba(24,119,242,0.45)'"
+        onmouseout="this.style.transform='';this.style.boxShadow=''">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        Share on Facebook
+      </button>
+      <button onclick="hfdScannerShareTwitter()"
+        style="display:inline-flex;align-items:center;gap:7px;padding:11px 20px;background:#000;color:white;border:none;border-radius:3px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.15s"
+        onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 14px rgba(0,0,0,0.4)'"
+        onmouseout="this.style.transform='';this.style.boxShadow=''">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        Post on X
+      </button>
+      <button onclick="hfdScannerShareLinkedIn()"
+        style="display:inline-flex;align-items:center;gap:7px;padding:11px 20px;background:#0A66C2;color:white;border:none;border-radius:3px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.15s"
+        onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 14px rgba(10,102,194,0.45)'"
+        onmouseout="this.style.transform='';this.style.boxShadow=''">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        Share on LinkedIn
+      </button>
+      <button onclick="hfdScannerShareSMS()"
+        style="display:inline-flex;align-items:center;gap:7px;padding:11px 20px;background:#27AE60;color:white;border:none;border-radius:3px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.15s"
+        onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 14px rgba(39,174,96,0.45)'"
+        onmouseout="this.style.transform='';this.style.boxShadow=''">
+        💬 Text a Friend
+      </button>
+      <button id="hfdCopyScannerLink" onclick="hfdScannerCopyLink()"
+        style="display:inline-flex;align-items:center;gap:7px;padding:11px 20px;background:rgba(255,255,255,0.1);color:white;border:1.5px solid rgba(255,255,255,0.25);border-radius:3px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.15s"
+        onmouseover="this.style.background='rgba(255,255,255,0.18)'"
+        onmouseout="this.style.background='rgba(255,255,255,0.1)'">
+        🔗 Copy Link
+      </button>
+    </div>
+
+    <div style="font-size:12px;color:rgba(255,255,255,0.35)">Free · No login required · Works on any device · HomeFraudDefense.org/fraudscan</div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="hfd-footer">
+  <p>
+    <strong>Home Fraud Defense™</strong> · HFDCP™ National Designation · ADRE School #S25-0019<br>
+    7865 W. Bell Road #1070, Peoria, AZ 85382 · 855-552-2863 · info@HomeFraudDefense.org<br><br>
+    This tool provides educational analysis only and does not constitute legal or financial advice.<br>
+    Home Fraud Defense™ does not investigate crimes or accept fraud reports.<br>
+    © 2026 Home Fraud Defense™ LLC. Home Fraud Defense™ and HFDCP™ are trademarks of Home Fraud Defense™ LLC.
+  </p>
+</div>
+
+<script>
+// ─── CONFIG ──────────────────────────────────────────────────────────────────
+// After deploying the Cloudflare Worker, paste its URL here.
+// Format:  https://hfd-fraudscan-alerts.YOUR-SUBDOMAIN.workers.dev
+// Or after adding a custom domain route: https://www.homefrauddefense.org
+const HFD_WORKER_URL = 'YOUR_WORKER_URL_HERE';
+const HFD_API_KEY = 'sk-ant-api03-Replace-With-Your-Key';
+
+// ─── STATE ───────────────────────────────────────────────────────────────────
+let hfdType        = 'email';
+let hfdInputMode   = 'text';   // 'text' | 'image'
+let hfdImageBase64 = null;
+let hfdImageMime   = null;
+
+// ─── EXAMPLES ────────────────────────────────────────────────────────────────
+const HFD_EXAMPLES = {
+  email: `FROM: deed-transfer@property-alert-services.com
+SUBJECT: URGENT FINAL NOTICE — Property Deed Transfer Pending
+
+Dear Property Owner,
+
+This is your FINAL NOTICE regarding an administrative deed transfer flagged on your property. The County Assessor's Office has identified an outstanding processing balance of $847.00 on your title record.
+
+To STOP this transfer and preserve your ownership rights, you must respond within 24 HOURS by calling 1-888-555-0147 OR submitting payment immediately via wire transfer or Google Play gift cards ($100 denominations accepted).
+
+Failure to respond will result in an automatic transfer of your property title to the State Lien Recovery Division.
+
+This is a legally binding notice. Do NOT disregard.
+
+Property Transfer Division
+State Administrative Recovery Services`,
+
+  text: `CHASE FRAUD ALERT: Suspicious activity detected on acct ending 4821. Your account has been LOCKED. Verify identity immediately or account will be permanently closed: http://chase-secure-verify-now.net/confirm — Ref #8847291`,
+
+  letter: `NOTICE OF FORECLOSURE ACTION — FINAL WARNING
+
+To the Current Property Owner:
+
+Foreclosure proceedings have been formally initiated against your property. A third-party creditor lien has been recorded in the amount of $14,200 due to an unresolved title defect.
+
+To immediately halt these proceedings, you must contact our Loss Mitigation Department within 72 hours at 1-800-555-0091. Payment arrangements can be made via wire transfer to our escrow account or via prepaid debit card.
+
+Failure to respond will result in a public auction of your property within 30 days.
+
+National Property Recovery Associates`,
+
+  phone: `Hello, this is Officer Martinez calling from the Social Security Administration Fraud Division. Your Social Security number has been suspended due to suspicious activity linked to a money laundering investigation. A federal arrest warrant has been issued in your name. To avoid immediate arrest you must call our case resolution line at 1-888-555-0234 right now. Do not contact local police as this is a federal matter.`,
+
+  social: `Hi! I came across your home listing and I'm very interested in purchasing. I'm currently working overseas but I'm serious. I can pay your full asking price plus a $5,000 bonus. My attorney will handle all closing documents remotely. I just need you to send $350 via Zelle for the title search processing fee before we can proceed — standard practice for international buyers. Please respond quickly.`
+};
+
+// ─── SYSTEM PROMPT ────────────────────────────────────────────────────────────
+const HFD_SYSTEM = `You are the HFD™ Fraud Scanner, an AI fraud detection tool built by Home Fraud Defense™ — the national standard for real estate fraud education. Your analysis is grounded in FBI IC3, FTC Consumer Sentinel, and FinCEN real estate crime data.
+
+Analyze messages for fraud indicators. When analyzing an image or screenshot, first read all visible text carefully, then analyze the content. Be direct, plain-English, and specific to what is actually in the message provided.
+
+CRITICAL: Respond ONLY with a single valid JSON object. No markdown, no code fences, no explanation outside the JSON.
+
+Return exactly this structure:
+{
+  "verdict": "LOW" | "SUSPICIOUS" | "HIGH",
+  "verdictTitle": "Short descriptive title e.g. 'High Fraud Risk Detected' or 'Message Appears Legitimate'",
+  "verdictSubtitle": "One clear sentence summarizing the overall assessment",
+  "scores": [
+    {"label": "Urgency Pressure", "value": 0-100, "level": "low|medium|high"},
+    {"label": "Payment Request", "value": 0-100, "level": "low|medium|high"},
+    {"label": "Impersonation Risk", "value": 0-100, "level": "low|medium|high"},
+    {"label": "Identity Deception", "value": 0-100, "level": "low|medium|high"}
+  ],
+  "findings": [
+    {
+      "severity": "red" | "amber" | "green",
+      "label": "Short finding name",
+      "description": "1-2 sentences citing specific language or visual elements from the message explaining why it is or is not a red flag"
+    }
+  ],
+  "actionHeadline": "Direct imperative headline e.g. 'Do Not Respond. Report This Message Immediately.'",
+  "actionSteps": ["Step 1 specific action", "Step 2 specific action", "Step 3 specific action"]
+}
+
+Rules:
+- findings: 3-5 items mixing red, amber, and green observations
+- actionSteps: exactly 3 steps, practical and specific to what was found
+- LOW verdict: still suggest verification best practices
+- HIGH verdict: urgent but empowering — tell them exactly what to do
+- Always reference specific phrases or details from the actual message or image
+- Write for a non-technical homeowner — plain, clear language
+- If USER-PROVIDED BACKGROUND CONTEXT is included, use it to sharpen your analysis:
+  * Factor their role (agent, buyer, lender, etc.) into how you interpret the message
+  * Note if the message is consistent or inconsistent with what they described expecting
+  * Use their context to personalize actionSteps — e.g. if they named a title company, tell them to call that company directly
+  * Include a "suggestedReply" field: a short, professional reply they can send IF the message turns out to be legitimate — or a firm decline message if HIGH risk. Tailor it to their stated role and situation.
+- If no context provided, omit "suggestedReply" from the JSON or set it to null`;
+
+// ─── MODE TOGGLE ─────────────────────────────────────────────────────────────
+function hfdSetMode(mode) {
+  hfdInputMode = mode;
+  document.getElementById('hfdModeText').classList.toggle('active', mode === 'text');
+  document.getElementById('hfdModeImage').classList.toggle('active', mode === 'image');
+  document.getElementById('hfdTextInputWrap').style.display = mode === 'text' ? 'block' : 'none';
+  document.getElementById('hfdImageInputWrap').style.display = mode === 'image' ? 'block' : 'none';
+  document.getElementById('hfdError').classList.remove('on');
+}
+
+// ─── TAB ─────────────────────────────────────────────────────────────────────
+function hfdTab(el, type) {
+  document.querySelectorAll('.hfd-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  hfdType = type;
+}
+
+function hfdUpdateChar() {
+  const len = document.getElementById('hfdInput').value.length;
+  document.getElementById('hfdCharCount').textContent = len.toLocaleString() + ' characters';
+}
+
+function hfdLoadExample() {
+  document.getElementById('hfdInput').value = HFD_EXAMPLES[hfdType] || HFD_EXAMPLES.email;
+  hfdUpdateChar();
+}
+
+// ─── IMAGE HANDLING ───────────────────────────────────────────────────────────
+function hfdFileSelected(e) {
+  const file = e.target.files[0];
+  if (file) hfdLoadImage(file);
+}
+
+function hfdDragOver(e) {
+  e.preventDefault();
+  document.getElementById('hfdDropZone').classList.add('drag-over');
+}
+
+function hfdDragLeave(e) {
+  document.getElementById('hfdDropZone').classList.remove('drag-over');
+}
+
+function hfdDrop(e) {
+  e.preventDefault();
+  document.getElementById('hfdDropZone').classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file && file.type.startsWith('image/')) hfdLoadImage(file);
+  else {
+    const errEl = document.getElementById('hfdError');
+    errEl.textContent = 'Please drop an image file (PNG, JPG, or WEBP).';
+    errEl.classList.add('on');
+  }
+}
+
+function hfdLoadImage(file) {
+  const errEl = document.getElementById('hfdError');
+  errEl.classList.remove('on');
+
+  if (file.size > 5 * 1024 * 1024) {
+    errEl.textContent = 'Image is too large. Please use a file under 5MB.';
+    errEl.classList.add('on');
+    return;
+  }
+
+  const validTypes = ['image/png', 'image/jpeg', 'image/webp', 'image/gif'];
+  if (!validTypes.includes(file.type)) {
+    errEl.textContent = 'Unsupported file type. Please use PNG, JPG, WEBP, or GIF.';
+    errEl.classList.add('on');
+    return;
+  }
+
+  hfdImageMime = file.type;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const dataUrl = e.target.result;
+    // Extract base64 only (strip the data:image/...;base64, prefix)
+    hfdImageBase64 = dataUrl.split(',')[1];
+
+    // Show preview
+    document.getElementById('hfdPreviewImg').src = dataUrl;
+    document.getElementById('hfdImageName').textContent = file.name + ' (' + (file.size / 1024).toFixed(0) + ' KB)';
+    document.getElementById('hfdDropZone').style.display = 'none';
+    document.getElementById('hfdImagePreview').classList.add('on');
+  };
+  reader.readAsDataURL(file);
+}
+
+function hfdRemoveImage() {
+  hfdImageBase64 = null;
+  hfdImageMime = null;
+  document.getElementById('hfdPreviewImg').src = '';
+  document.getElementById('hfdImageName').textContent = '';
+  document.getElementById('hfdDropZone').style.display = 'flex';
+  document.getElementById('hfdImagePreview').classList.remove('on');
+  document.getElementById('hfdFileInput').value = '';
+}
+
+// ─── CLEAR / RESET ───────────────────────────────────────────────────────────
+function hfdClear() {
+  document.getElementById('hfdInput').value = '';
+  document.getElementById('hfdCharCount').textContent = '0 characters';
+  hfdRemoveImage();
+  document.getElementById('hfdResults').classList.remove('on');
+  document.getElementById('hfdLoading').classList.remove('on');
+  document.getElementById('hfdError').classList.remove('on');
+  document.getElementById('hfdScanBtn').disabled = false;
+}
+
+// ─── CONTEXT FIELD ───────────────────────────────────────────────────────────
+function  {
+  const body = document.getElementById('hfdContextBody');
+  const chev = document.getElementById('hfdContextChevron');
+  const open = body.classList.toggle('open');
+  chev.classList.toggle('open', open);
+}
+
+function hfdContextPill(btn, text) {
+  const ta = document.getElementById('hfdContext');
+  // Append if there's existing text, otherwise set
+  const existing = ta.value.trim();
+  ta.value = existing ? existing + ' ' + text : text;
+  hfdContextChar();
+  ta.focus();
+  // Pulse the pill
+  btn.style.background = '#0A1E3D';
+  btn.style.color = '#fff';
+  btn.style.borderColor = '#0A1E3D';
+  setTimeout(() => {
+    btn.style.background = '';
+    btn.style.color = '';
+    btn.style.borderColor = '';
+  }, 800);
+}
+
+function hfdContextChar() {
+  const len = document.getElementById('hfdContext').value.length;
+  document.getElementById('hfdContextCount').textContent = len;
+}
+
+function hfdCopyReply() {
+  const text = document.getElementById('hfdSuggestedReply').value.trim();
+  if (!text) return;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('hfdCopyReplyBtn');
+    btn.textContent = '\u2713 Copied!';
+    btn.style.background = '#1A7A4A';
+    setTimeout(() => {
+      btn.textContent = 'Copy Reply';
+      btn.style.background = '';
+    }, 2000);
+  }).catch(() => prompt('Copy this reply:', text));
+}
+
+function hfdScanAgain() {
+  document.getElementById('hfdResults').classList.remove('on');
+  document.getElementById('hfdInput').scrollIntoView({ behavior: 'smooth' });
+  setTimeout(() => document.getElementById('hfdInput').focus(), 400);
+}
+
+// ─── LOADING STEPS ───────────────────────────────────────────────────────────
+const STEP_LABELS = ['Scanning urgency signals', 'Checking payment patterns', 'Analyzing identity claims', 'Matching fraud patterns'];
+
+function hfdStartSteps() {
+  STEP_LABELS.forEach((label, i) => {
+    const el = document.getElementById('hfdStep' + i);
+    el.className = 'hfd-step';
+    el.textContent = label;
+  });
+  let i = 0;
+  const iv = setInterval(() => {
+    if (i > 0) {
+      const prev = document.getElementById('hfdStep' + (i - 1));
+      prev.className = 'hfd-step done';
+      prev.textContent = '✓ ' + STEP_LABELS[i - 1];
+    }
+    if (i < STEP_LABELS.length) {
+      const el = document.getElementById('hfdStep' + i);
+      el.className = 'hfd-step on';
+      el.innerHTML = '<span class="hfd-spin"></span> ' + STEP_LABELS[i];
+      i++;
+    } else {
+      clearInterval(iv);
+    }
+  }, 700);
+  return iv;
+}
+
+// ─── MAIN SCAN ───────────────────────────────────────────────────────────────
+async function hfdRunScan() {
+  const errEl = document.getElementById('hfdError');
+  errEl.classList.remove('on');
+
+  // Validate input based on mode
+  const isImageMode = hfdInputMode === 'image';
+  const textMessage = document.getElementById('hfdInput').value.trim();
+
+  if (isImageMode && !hfdImageBase64) {
+    errEl.textContent = 'Please upload an image or screenshot to analyze.';
+    errEl.classList.add('on');
+    return;
+  }
+  if (!isImageMode && textMessage.length < 15) {
+    errEl.textContent = 'Please paste a message to analyze (at least 15 characters).';
+    errEl.classList.add('on');
+    return;
+  }
+
+  document.getElementById('hfdScanBtn').disabled = true;
+  document.getElementById('hfdResults').classList.remove('on');
+  document.getElementById('hfdLoading').classList.add('on');
+
+  // Update loading label for image mode
+  document.querySelector('.hfd-loading-label').textContent = isImageMode
+    ? 'Reading screenshot and analyzing for fraud indicators…'
+    : 'Analyzing message for fraud indicators…';
+
+  const stepInterval = hfdStartSteps();
+
+  // Build the message content array for Claude API
+  let userContent;
+  if (isImageMode) {
+    userContent = [
+      {
+        type: 'image',
+        source: {
+          type: 'base64',
+          media_type: hfdImageMime,
+          data: hfdImageBase64
+        }
+      },
+      {
+        type: 'text',
+        text: (() => {
+          const ctx = document.getElementById('hfdContext').value.trim();
+          const ctxNote = ctx ? `\n\nUSER-PROVIDED BACKGROUND CONTEXT:\n${ctx}` : '';
+          return `This is a screenshot of a suspicious message. Message type context: ${hfdType}.${ctxNote}\n\nPlease read all text visible in the image carefully, then analyze the full content for fraud indicators. Provide your analysis in the required JSON format.`;
+        })()
+      }
+    ];
+  } else {
+    const ctx = document.getElementById('hfdContext').value.trim();
+    const contextSection = ctx ? `\n\nUSER-PROVIDED BACKGROUND CONTEXT:\n${ctx}` : '';
+    userContent = `Message type: ${hfdType}${contextSection}\n\nMessage to analyze:\n\n${textMessage}`;
+  }
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': HFD_API_KEY,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1024,
+        system: HFD_SYSTEM,
+        messages: [{ role: 'user', content: userContent }]
+      })
+    });
+
+    clearInterval(stepInterval);
+    STEP_LABELS.forEach((label, i) => {
+      const el = document.getElementById('hfdStep' + i);
+      el.className = 'hfd-step done';
+      el.textContent = '✓ ' + label;
+    });
+
+    if (!response.ok) {
+      const body = await response.text();
+      throw new Error('API returned ' + response.status + '. ' + body);
+    }
+
+    const data = await response.json();
+    const raw = (data.content || []).map(c => c.text || '').join('').trim();
+
+    let result;
+    const clean = raw.replace(/^```json\s*/i, '').replace(/```$/, '').trim();
+    try {
+      result = JSON.parse(clean);
+    } catch {
+      const match = clean.match(/\{[\s\S]*\}/);
+      if (match) result = JSON.parse(match[0]);
+      else throw new Error('AI response was not valid JSON. Raw: ' + raw.slice(0, 200));
+    }
+
+    setTimeout(() => {
+      document.getElementById('hfdLoading').classList.remove('on');
+      hfdRender(result);
+      document.getElementById('hfdScanBtn').disabled = false;
+    }, 300);
+
+  } catch (err) {
+    clearInterval(stepInterval);
+    document.getElementById('hfdLoading').classList.remove('on');
+    document.getElementById('hfdScanBtn').disabled = false;
+    errEl.innerHTML = '<strong>Analysis failed.</strong> Please try again in a moment.<br><small style="opacity:0.7">' + err.message + '</small>';
+    errEl.classList.add('on');
+    console.error('HFD Scanner error:', err);
+  }
+}
+
+// ─── RENDER ──────────────────────────────────────────────────────────────────
+function hfdRender(r) {
+  const v = (r.verdict || 'SUSPICIOUS').toUpperCase();
+  const cls = v === 'HIGH' ? 'high' : v === 'LOW' ? 'low' : 'suspicious';
+
+  // STEP 1: Verdict banner (always free)
+  document.getElementById('hfdVerdictBanner').className = 'hfd-verdict ' + cls;
+  document.getElementById('hfdVerdictIcon').textContent = v === 'HIGH' ? '⚠' : v === 'LOW' ? '✓' : '?';
+  document.getElementById('hfdVerdictBadge').textContent = v === 'HIGH' ? 'High Risk Detected' : v === 'LOW' ? 'Low Risk' : 'Suspicious — Verify Before Acting';
+  document.getElementById('hfdVerdictTitle').textContent = r.verdictTitle || '';
+  document.getElementById('hfdVerdictSub').textContent = r.verdictSubtitle || '';
+
+  // STEP 1: Top finding preview (always free)
+  const topF = (r.findings || [])[0];
+  document.getElementById('hfdTopFindingBody').innerHTML = topF
+    ? `<div class="hfd-finding"><div class="hfd-dot ${topF.severity || 'amber'}"></div><div><div class="hfd-finding-label">${topF.label}</div><div class="hfd-finding-desc">${topF.description}</div></div></div>`
+    : '<div style="font-size:13px;color:#8A95A3">No major findings detected.</div>';
+
+  // STEP 2: Pre-populate full report behind gate
+  document.getElementById('hfdMeters').innerHTML = (r.scores || []).map(s =>
+    `<div class="hfd-meter-row">
+      <div class="hfd-meter-label">${s.label}</div>
+      <div class="hfd-meter-track">
+        <div class="hfd-meter-fill ${s.level || 'low'}" data-target="${s.value || 0}" style="width:0%"></div>
+      </div>
+      <div class="hfd-meter-pct">${s.value || 0}%</div>
+    </div>`
+  ).join('');
+
+  document.getElementById('hfdFindings').innerHTML = (r.findings || []).map(f =>
+    `<div class="hfd-finding">
+      <div class="hfd-dot ${f.severity || 'amber'}"></div>
+      <div>
+        <div class="hfd-finding-label">${f.label}</div>
+        <div class="hfd-finding-desc">${f.description}</div>
+      </div>
+    </div>`
+  ).join('');
+
+  document.getElementById('hfdActionHl').textContent = r.actionHeadline || '';
+  document.getElementById('hfdActionSteps').innerHTML = (r.actionSteps || []).map((s, i) =>
+    `<div class="hfd-action-step">
+      <div class="hfd-action-num">${i + 1}</div>
+      <div class="hfd-action-text">${s}</div>
+    </div>`
+  ).join('');
+
+  // Suggested reply (only shown if context was provided and AI generated one)
+  const replyEl = document.getElementById('hfdSuggestedReply');
+  const replyWrap = document.getElementById('hfdReplyWrap');
+  if (replyEl && replyWrap) {
+    if (r.suggestedReply) {
+      replyEl.textContent = r.suggestedReply;
+      replyWrap.style.display = 'block';
+    } else {
+      replyWrap.style.display = 'none';
+    }
+  }
+
+  // Show gate, hide full report
+  document.getElementById('hfdGateWrap').classList.add('on');
+  document.getElementById('hfdFullReport').classList.remove('on');
+  document.getElementById('hfdGateName').value = '';
+  document.getElementById('hfdGateEmail').value = '';
+  document.getElementById('hfdGateError').classList.remove('on');
+  const gb = document.getElementById('hfdGateBtn');
+  gb.disabled = false;
+  gb.innerHTML = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L1.5 3.5V7.5C1.5 11 4 13.5 7 14C10 13.5 12.5 11 12.5 7.5V3.5L7 1Z" stroke="white" stroke-width="1.2"/></svg> Unlock My Full Report';
+
+  document.getElementById('hfdResults').classList.add('on');
+  document.getElementById('hfdResults').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ─── GATE UNLOCK ─────────────────────────────────────────────────────────────
+// ── SKIP: unlock without capturing email ─────────────────────────────────────
+function hfdSkipGate() {
+  hfdRevealReport(null, null, false);
+}
+
+// ── UNLOCK WITH EMAIL ─────────────────────────────────────────────────────────
+function hfdUnlockReport() {
+  const name    = document.getElementById('hfdGateName').value.trim();
+  const email   = document.getElementById('hfdGateEmail').value.trim();
+  const consent = document.getElementById('hfdConsentEmail').checked;
+  const errEl   = document.getElementById('hfdGateError');
+  errEl.classList.remove('on');
+
+  if (!name) {
+    errEl.textContent = 'Please enter your first name.';
+    errEl.classList.add('on'); return;
+  }
+  if (!email || !email.includes('@') || !email.includes('.')) {
+    errEl.textContent = 'Please enter a valid email address.';
+    errEl.classList.add('on'); return;
+  }
+
+  const btn = document.getElementById('hfdGateBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 14 14" style="animation:spin 0.7s linear infinite"><path d="M7 1A6 6 0 1 0 13 7" stroke="white" stroke-width="1.5" fill="none"/></svg> Opening your report…';
+
+  // ── Always log to console (DevTools → see your leads)
+  console.log('HFD Lead:', {
+    name, email, consent,
+    verdict: hfdLastResult?.verdict,
+    verdictTitle: hfdLastResult?.verdictTitle,
+    source: 'HFD-FraudScan',
+    ts: new Date().toISOString()
+  });
+
+  // ────────────────────────────────────────────────────────────────────────────
+  // GOOGLE APPS SCRIPT — emails every lead to john.rowan6@gmail.com
+  // Uses a hidden form POST to avoid CORS issues entirely
+  // ────────────────────────────────────────────────────────────────────────────
+  try {
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbwQHvj-IQdNlm6n1RUfM4VoWhNxgZPh2z4d6H30sEGIJKrMX4UOr0YskBmnU5RWKumQ/exec';
+    const gasForm = document.createElement('form');
+    gasForm.method = 'POST';
+    gasForm.action = GAS_URL;
+    gasForm.target = 'hfd_gas_iframe';
+    gasForm.style.display = 'none';
+    const gasFields = {
+      name:       name,
+      email:      email,
+      consent:    consent ? 'Yes — opted in' : 'No — skipped',
+      verdict:    hfdLastResult?.verdictTitle || hfdLastResult?.verdict || '',
+      topFinding: (hfdLastResult?.findings||[])[0]?.label || '',
+      action:     hfdLastResult?.actionHeadline || '',
+      page:       window.location.href,
+      timestamp:  new Date().toISOString()
+    };
+    Object.entries(gasFields).forEach(([k, v]) => {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = k;
+      input.value = v;
+      gasForm.appendChild(input);
+    });
+    const gasIframe = document.createElement('iframe');
+    gasIframe.name = 'hfd_gas_iframe';
+    gasIframe.style.display = 'none';
+    document.body.appendChild(gasIframe);
+    document.body.appendChild(gasForm);
+    gasForm.submit();
+    setTimeout(() => { gasForm.remove(); gasIframe.remove(); }, 5000);
+    console.log('HFD Lead submitted to Google Apps Script:', { name, email });
+  } catch(e) {
+    console.warn('HFD GAS error (non-blocking):', e);
+  }
+
+  // Small delay so button feedback is visible, then reveal
+  setTimeout(() => hfdRevealReport(name, email, consent), 480);
+}
+
+// ── SHARED REVEAL — called by both hfdUnlockReport and hfdSkipGate ────────────
+function hfdRevealReport(name, email, consent) {
+  // Remove gate and top-finding card entirely — no blank space
+  const gateEl    = document.getElementById('hfdGateWrap');
+  const topFindEl = document.getElementById('hfdTopFindingCard');
+  if (gateEl)    gateEl.remove();
+  if (topFindEl) topFindEl.remove();
+
+  // Show full report
+  const report = document.getElementById('hfdFullReport');
+  report.classList.add('on');
+
+  // Show email confirmation banner if they opted in
+  if (consent && email) {
+    const banner = document.getElementById('hfdEmailSentBanner');
+    if (banner) {
+      banner.querySelector('.hfd-email-banner-addr').textContent = email;
+      banner.style.display = 'flex';
+    }
+  }
+
+  // Build alert URL
+  const rawMsg = (document.getElementById('hfdInput')?.value || '').trim();
+  hfdAlertURL = '';
+  if (HFD_WORKER_URL && HFD_WORKER_URL !== 'YOUR_WORKER_URL_HERE') {
+    fetch(HFD_WORKER_URL + '/api/alert', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ result: hfdLastResult, rawMessage: rawMsg })
+    })
+    .then(r => r.json())
+    .then(data => {
+      if (data.url) {
+        hfdAlertURL = data.url;
+        const urlEl = document.getElementById('hfdAlertURLDisplay');
+        if (urlEl) { urlEl.textContent = hfdAlertURL; urlEl.href = hfdAlertURL; urlEl.style.fontStyle = 'normal'; }
+      }
+    })
+    .catch(() => { hfdAlertURL = hfdBuildAlertURL(hfdLastResult, rawMsg); });
+  } else {
+    hfdAlertURL = hfdBuildAlertURL(hfdLastResult, rawMsg);
+  }
+
+  // Build share card image
+  if (hfdLastResult) hfdBuildShareCard(hfdLastResult);
+
+  // Animate meters
+  requestAnimationFrame(() => {
+    setTimeout(() => {
+      document.querySelectorAll('.hfd-meter-fill').forEach(el => {
+        el.style.width = el.dataset.target + '%';
+      });
+    }, 80);
+  });
+
+  report.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+
+// ─── SHARE CARD ──────────────────────────────────────────────────────────────
+let hfdLastResult = null;
+
+// Store result when rendered so share functions can access it
+const _origRender = hfdRender;
+hfdRender = function(r) {
+  hfdLastResult = r;
+  _origRender(r);
+  // hfdBuildShareCard is called inside hfdUnlockReport after gate clears
+};
+
+function hfdBuildShareCard(r) {
+  // Render canvas into the img preview element
+  const canvas = hfdBuildReportCanvas();
+  if (!canvas) return;
+  const dataURL = canvas.toDataURL('image/png');
+  const img = document.getElementById('hfdShareImgPreview');
+  if (img) { img.src = dataURL; img.style.display = 'block'; }
+  // Keep a reference for copy-to-clipboard
+  window._hfdShareDataURL = dataURL;
+}
+
+// ── ALERT URL BUILDER ────────────────────────────────────────────────────────
+function hfdBuildAlertURL(r, rawMessage) {
+  // Redact personal info from the message excerpt
+  let excerpt = (rawMessage || '').substring(0, 400).trim();
+  // Redact emails
+  excerpt = excerpt.replace(/[\w.+-]+@[\w-]+\.[\w.]+/g, '[email redacted]');
+  // Redact phone numbers
+  excerpt = excerpt.replace(/(\+?1[\s.-]?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}/g, '[phone redacted]');
+  // Redact URLs
+  excerpt = excerpt.replace(/https?:\/\/[^\s]+/g, '[link redacted]');
+  // Redact names that look like "Dear John" / "Hi Sarah"
+  excerpt = excerpt.replace(/\b(Dear|Hi|Hello|Hey)\s+[A-Z][a-z]+/g, '$1 [name redacted]');
+  // Redact dollar amounts over $1000 (keep pattern visible but obscure specific amount)
+  excerpt = excerpt.replace(/\$[\d,]{5,}/g, '$[amount redacted]');
+
+  const payload = {
+    v: r.verdict,
+    vt: r.verdictTitle || '',
+    vs: r.verdictSubtitle || '',
+    f: (r.findings || []).map(f => ({ s: f.severity, l: f.label, d: f.description })),
+    e: excerpt,
+    ts: Date.now()
+  };
+
+  try {
+    const json = JSON.stringify(payload);
+    const b64 = btoa(unescape(encodeURIComponent(json)));
+    const base = window.location.href.split('?')[0];
+    return base + '?alert=' + encodeURIComponent(b64);
+  } catch(err) {
+    return window.location.href.split('?')[0];
+  }
+}
+
+// Store the alert URL once built so share functions can reuse it
+let hfdAlertURL = '';
+
+function hfdBuildReportCanvas() {
+  const r = hfdLastResult;
+  if (!r) return null;
+
+  const v      = (r.verdict || 'SUSPICIOUS').toUpperCase();
+  const isHigh = v === 'HIGH', isLow = v === 'LOW';
+  const bgDark = isHigh ? '#1A0000' : isLow ? '#001A0A' : '#1A0F00';
+  const bgMid  = isHigh ? '#3D0000' : isLow ? '#003D1A' : '#3D2000';
+  const accent = isHigh ? '#FF5555' : isLow ? '#3FBF7F' : '#F4A636';
+  const badgeTxt = isHigh ? '\u26A0  HIGH RISK DETECTED' : isLow ? '\u2713  LOW RISK' : '?  SUSPICIOUS \u2014 VERIFY';
+
+  const PAD = 44, W = 900;
+
+  function wrapText(ctx, text, maxW) {
+    const words = String(text).split(' ');
+    const lines = []; let line = '';
+    for (const w of words) {
+      const t = line ? line + ' ' + w : w;
+      if (ctx.measureText(t).width > maxW && line) { lines.push(line); line = w; }
+      else line = t;
+    }
+    if (line) lines.push(line);
+    return lines;
+  }
+
+  function rrect(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+    ctx.lineTo(x+w,y+h-r); ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+    ctx.lineTo(x+r,y+h); ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+    ctx.lineTo(x,y+r); ctx.quadraticCurveTo(x,y,x+r,y); ctx.closePath();
+  }
+
+  // Measure excerpt
+  const rawMsg = (document.getElementById('hfdInput')?.value || '').trim();
+  let excerpt = rawMsg.substring(0, 300)
+    .replace(/[\w.+-]+@[\w-]+\.[\w.]+/g, '[email]')
+    .replace(/(\+?1[\s.-]?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}/g, '[phone]')
+    .replace(/https?:\/\/[^\s]+/g, '[link]')
+    .replace(/\b(Dear|Hi|Hello|Hey)\s+[A-Z][a-z]+/g, '$1 [name]');
+  if (rawMsg.length > 300) excerpt += '\u2026';
+  if (!excerpt) excerpt = '(image/screenshot analyzed \u2014 no text excerpt available)';
+
+  // Pre-measure on offscreen canvas
+  const oc = document.createElement('canvas');
+  oc.width = W; oc.height = 10;
+  const octx = oc.getContext('2d');
+  octx.font = '13px monospace';
+  const excerptLines = wrapText(octx, excerpt, W - PAD * 2 - 20);
+  const excerptH = excerptLines.length * 20 + 40;
+
+  const findings = r.findings || [];
+  octx.font = '13px sans-serif';
+  let findingsH = 0;
+  for (const f of findings) {
+    const dl = wrapText(octx, f.description, W - PAD * 2 - 26);
+    findingsH += 22 + dl.length * 19 + 14;
+  }
+
+  const scores = (r.scores || []).slice(0, 4);
+  const H = 64 + 110 + excerptH + 24 + scores.length * 36 + 28 + findingsH + 50;
+
+  const canvas = document.createElement('canvas');
+  canvas.width = W; canvas.height = H;
+  const ctx = canvas.getContext('2d');
+
+  // BG gradient
+  const grad = ctx.createLinearGradient(0, 0, 0, H);
+  grad.addColorStop(0, bgDark); grad.addColorStop(1, bgMid);
+  ctx.fillStyle = grad; ctx.fillRect(0, 0, W, H);
+
+  // Left accent stripe
+  ctx.fillStyle = accent; ctx.fillRect(0, 0, 5, H);
+
+  let cy = 0;
+
+  // HEADER
+  ctx.fillStyle = 'rgba(0,0,0,0.38)'; ctx.fillRect(0, 0, W, 58);
+  ctx.font = 'bold 14px sans-serif'; ctx.fillStyle = 'rgba(255,255,255,0.50)';
+  ctx.fillText('HFD\u2122 FraudScan  \u00B7  Home Fraud Defense\u2122', PAD, 36);
+  ctx.font = 'bold 13px sans-serif'; ctx.fillStyle = accent;
+  ctx.fillText(badgeTxt, W - PAD - ctx.measureText(badgeTxt).width, 36);
+  cy = 68;
+
+  // VERDICT TITLE
+  ctx.font = 'bold 28px Georgia,serif'; ctx.fillStyle = '#FFF';
+  ctx.fillText(r.verdictTitle || 'Scan Complete', PAD, cy + 28); cy += 40;
+  ctx.font = '14px sans-serif'; ctx.fillStyle = 'rgba(255,255,255,0.58)';
+  const subLines = wrapText(ctx, r.verdictSubtitle || '', W - PAD * 2);
+  for (const l of subLines) { ctx.fillText(l, PAD, cy + 15); cy += 19; }
+  cy += 24;
+
+  // EXCERPT BOX
+  ctx.fillStyle = 'rgba(0,0,0,0.30)';
+  rrect(ctx, PAD, cy, W - PAD * 2, excerptH, 6); ctx.fill();
+  ctx.fillStyle = accent; ctx.fillRect(PAD, cy, 4, excerptH);
+  ctx.font = '10px sans-serif'; ctx.fillStyle = 'rgba(255,255,255,0.32)';
+  ctx.fillText('SCANNED CONTENT (first 300 chars, personal info redacted)', PAD + 14, cy + 14);
+  ctx.font = '13px monospace'; ctx.fillStyle = 'rgba(255,255,255,0.78)';
+  let ey = cy + 30;
+  for (const l of excerptLines) { ctx.fillText(l, PAD + 14, ey); ey += 20; }
+  cy += excerptH + 24;
+
+  // RISK SCORES
+  ctx.font = '10px sans-serif'; ctx.fillStyle = 'rgba(255,255,255,0.30)';
+  ctx.fillText('RISK INDICATORS', PAD, cy + 12); cy += 20;
+  for (const s of scores) {
+    const bx = PAD + 200, bw = W - PAD - bx - 56;
+    ctx.font = '13px sans-serif'; ctx.fillStyle = 'rgba(255,255,255,0.72)';
+    ctx.fillText(s.label, PAD, cy + 14);
+    ctx.fillStyle = 'rgba(255,255,255,0.10)';
+    rrect(ctx, bx, cy + 3, bw, 10, 4); ctx.fill();
+    const fc = s.level === 'high' ? '#FF5555' : s.level === 'medium' ? '#F4A636' : '#3FBF7F';
+    ctx.fillStyle = fc;
+    rrect(ctx, bx, cy + 3, Math.max(10, bw * (s.value / 100)), 10, 4); ctx.fill();
+    ctx.font = 'bold 12px sans-serif'; ctx.fillStyle = 'rgba(255,255,255,0.82)';
+    ctx.fillText(s.value + '%', W - PAD - 40, cy + 14);
+    cy += 36;
+  }
+  cy += 16;
+
+  // FINDINGS
+  ctx.font = '10px sans-serif'; ctx.fillStyle = 'rgba(255,255,255,0.30)';
+  ctx.fillText('FRAUD FINDINGS', PAD, cy + 12); cy += 22;
+  for (const f of findings) {
+    const dotColor = f.severity === 'red' ? '#FF5555' : f.severity === 'green' ? '#3FBF7F' : '#F4A636';
+    ctx.fillStyle = dotColor;
+    ctx.beginPath(); ctx.arc(PAD + 7, cy + 8, 5, 0, Math.PI * 2); ctx.fill();
+    ctx.font = 'bold 14px sans-serif'; ctx.fillStyle = '#FFF';
+    ctx.fillText(f.label, PAD + 20, cy + 14); cy += 22;
+    ctx.font = '13px sans-serif'; ctx.fillStyle = 'rgba(255,255,255,0.65)';
+    const dl = wrapText(ctx, f.description, W - PAD * 2 - 22);
+    for (const line of dl) { ctx.fillText(line, PAD + 20, cy + 13); cy += 19; }
+    cy += 14;
+  }
+
+  // FOOTER
+  ctx.fillStyle = 'rgba(0,0,0,0.32)'; ctx.fillRect(0, H - 42, W, 42);
+  ctx.font = '11px sans-serif'; ctx.fillStyle = 'rgba(255,255,255,0.32)';
+  ctx.fillText('HomeFraudDefense.org/fraudscan  \u00B7  Free  \u00B7  AI-Powered  \u00B7  FBI IC3 Data', PAD, H - 14);
+  const ctaText = 'Scan your suspicious messages free \u2192';
+  ctx.fillText(ctaText, W - PAD - ctx.measureText(ctaText).width, H - 14);
+
+  return canvas;
+}
+
+// ── SAVE IMAGE ────────────────────────────────────────────────────────────────
+function hfdDownloadCard() {
+  const canvas = hfdBuildReportCanvas();
+  if (!canvas) return;
+  const link = document.createElement('a');
+  link.download = 'HFD-FraudAlert-' + Date.now() + '.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+
+// ── SHARE: native share API on mobile, image download + tab on desktop ────────
+async function hfdShareImageTo(platform) {
+  const canvas = hfdBuildReportCanvas();
+  if (!canvas) { alert('No scan result to share yet.'); return; }
+
+  const r = hfdLastResult || {};
+  const v = (r.verdict || 'SUSPICIOUS').toUpperCase();
+  const emoji   = v === 'HIGH' ? '\uD83D\uDEA8' : v === 'LOW' ? '\u2705' : '\u26A0\uFE0F';
+  const verdict = v === 'HIGH' ? 'HIGH RISK' : v === 'LOW' ? 'LOW RISK' : 'SUSPICIOUS';
+  const title   = r.verdictTitle || '';
+  const topF    = (r.findings || []).find(f => f.severity === 'red') || (r.findings || [])[0];
+  const topLine = topF ? '\u26A0 ' + topF.label + ': ' + topF.description.substring(0, 90) + (topF.description.length > 90 ? '\u2026' : '') : '';
+  const scanURL = 'https://HomeFraudDefense.org/fraudscan';
+
+  const captions = {
+    facebook: emoji + ' HFD\u2122 FraudScan flagged this message ' + verdict + ' \u2014 see what to watch for.\n\n'
+      + (title ? '\u201C' + title + '\u201D\n\n' : '')
+      + (topLine ? topLine + '\n\n' : '')
+      + 'Full fraud report in the image above. Scan your own messages free:\n' + scanURL,
+
+    twitter:  emoji + ' HFD\u2122 FraudScan flagged this message ' + verdict + '\n\n'
+      + (title ? '\u201C' + title + '\u201D\n' : '')
+      + (topLine ? topLine + '\n' : '')
+      + '\nFull report \u2193 image attached. Scan yours free: ' + scanURL
+      + '\n\n#FraudAlert #RealEstateFraud #HomeFraudDefense',
+
+    linkedin: emoji + ' Sharing this fraud alert so real estate professionals and homeowners know what these look like.\n\n'
+      + 'HFD\u2122 FraudScan verdict: ' + verdict + '\n'
+      + (title ? '\u201C' + title + '\u201D\n\n' : '\n')
+      + (topLine ? 'Key finding: ' + topLine + '\n\n' : '')
+      + 'Full report with scanned message and all findings in the image. '
+      + 'Share with your clients \u2014 it could save a closing.\n\nScan free: ' + scanURL,
+
+    sms:      emoji + ' HFD FraudScan flagged this message ' + verdict + '. '
+      + (title ? title + '. ' : '')
+      + 'Full fraud report image attached. Scan yours free: ' + scanURL
+  };
+
+  const caption = captions[platform] || captions.twitter;
+
+  // Mobile: try native Web Share API with image file
+  if (navigator.canShare) {
+    try {
+      const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
+      const file = new File([blob], 'HFD-FraudAlert.png', { type: 'image/png' });
+      if (navigator.canShare({ files: [file] })) {
+        await navigator.share({ files: [file], title: 'HFD\u2122 Fraud Alert: ' + verdict, text: caption });
+        return;
+      }
+    } catch(e) {
+      if (e.name === 'AbortError') return; // user cancelled
+    }
+  }
+
+  // Desktop: download image, brief pause, then open platform with caption
+  hfdDownloadCard();
+  const btn = document.getElementById(
+    platform === 'facebook' ? 'hfdShareFbBtn' :
+    platform === 'twitter'  ? 'hfdShareTwBtn' :
+    platform === 'linkedin' ? 'hfdShareLiBtn' : 'hfdShareSmsBtn'
+  );
+  if (btn) { btn.textContent = '\u2193 Image saved \u2014 attach it to your post'; btn.style.opacity = '0.7'; }
+  await new Promise(res => setTimeout(res, 700));
+  if (btn) { btn.textContent = btn.dataset.orig || btn.textContent; btn.style.opacity = ''; }
+
+  if (platform === 'facebook') {
+    window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(scanURL) + '&quote=' + encodeURIComponent(caption), '_blank', 'width=640,height=540');
+  } else if (platform === 'twitter') {
+    window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(caption), '_blank', 'width=600,height=420');
+  } else if (platform === 'linkedin') {
+    window.open('https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(scanURL) + '&summary=' + encodeURIComponent(caption), '_blank', 'width=640,height=540');
+  } else if (platform === 'sms') {
+    window.location.href = 'sms:?body=' + encodeURIComponent(caption);
+  }
+}
+
+async function hfdShareFacebook() {
+  await hfdCopyImageToClipboard();
+  await new Promise(r => setTimeout(r, 400));
+  const r = hfdLastResult || {}, v = (r.verdict||'SUSPICIOUS').toUpperCase();
+  const verdict = v==='HIGH'?'HIGH RISK':v==='LOW'?'LOW RISK':'SUSPICIOUS';
+  const title = r.verdictTitle || '';
+  const topF = (r.findings||[]).find(f=>f.severity==='red')||(r.findings||[])[0];
+  const topLine = topF ? '\u26A0 '+topF.label+': '+topF.description.substring(0,90)+(topF.description.length>90?'\u2026':'') : '';
+  const caption = '\uD83D\uDEA8 HFD\u2122 FraudScan flagged this message '+verdict+' \u2014 see what to watch for.\n\n'+(title?'\u201C'+title+'\u201D\n\n':'')+(topLine?topLine+'\n\n':'')+'Full fraud report in image. Scan your own messages free: https://HomeFraudDefense.org/fraudscan';
+  window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent('https://HomeFraudDefense.org/fraudscan')+'&quote='+encodeURIComponent(caption),'_blank','width=640,height=540');
+}
+
+async function hfdShareTwitter() {
+  await hfdCopyImageToClipboard();
+  await new Promise(r => setTimeout(r, 400));
+  const r = hfdLastResult || {}, v = (r.verdict||'SUSPICIOUS').toUpperCase();
+  const verdict = v==='HIGH'?'HIGH RISK':v==='LOW'?'LOW RISK':'SUSPICIOUS';
+  const title = r.verdictTitle || '';
+  const topF = (r.findings||[]).find(f=>f.severity==='red')||(r.findings||[])[0];
+  const topLine = topF ? topF.label+': '+topF.description.substring(0,80)+(topF.description.length>80?'\u2026':'') : '';
+  const text = '\uD83D\uDEA8 HFD\u2122 FraudScan: '+verdict+'\n\n'+(title?'\u201C'+title+'\u201D\n':'')+( topLine?'\u26A0 '+topLine+'\n\n':'')+' Paste the image I just copied into your post below. Scan yours free: https://HomeFraudDefense.org/fraudscan\n\n#FraudAlert #RealEstateFraud #HomeFraudDefense';
+  window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(text),'_blank','width=600,height=420');
+}
+
+async function hfdShareLinkedIn() {
+  await hfdCopyImageToClipboard();
+  await new Promise(r => setTimeout(r, 400));
+  const r = hfdLastResult || {}, v = (r.verdict||'SUSPICIOUS').toUpperCase();
+  const verdict = v==='HIGH'?'HIGH RISK':v==='LOW'?'LOW RISK':'SUSPICIOUS';
+  const title = r.verdictTitle || '';
+  const topF = (r.findings||[]).find(f=>f.severity==='red')||(r.findings||[])[0];
+  const topLine = topF ? topF.label+': '+topF.description.substring(0,100)+(topF.description.length>100?'\u2026':'') : '';
+  const summary = '\uD83D\uDEA8 Sharing this fraud alert so real estate pros and homeowners know what these look like.\n\nHFD\u2122 FraudScan verdict: '+verdict+'\n'+(title?'\u201C'+title+'\u201D\n\n':'\n')+(topLine?'Key finding: '+topLine+'\n\n':'')+'Full report in the image (paste with Ctrl+V). Share with clients \u2014 it could save a closing.\n\nScan free: https://HomeFraudDefense.org/fraudscan';
+  window.open('https://www.linkedin.com/sharing/share-offsite/?url='+encodeURIComponent('https://HomeFraudDefense.org/fraudscan')+'&summary='+encodeURIComponent(summary),'_blank','width=640,height=540');
+}
+
+function hfdShareSMS() {
+  const r = hfdLastResult || {}, v = (r.verdict||'SUSPICIOUS').toUpperCase();
+  const verdict = v==='HIGH'?'HIGH RISK':v==='LOW'?'LOW RISK':'SUSPICIOUS';
+  const title = r.verdictTitle || '';
+  const text = '\uD83D\uDEA8 HFD FraudScan flagged this message '+verdict+(title?' \u2014 '+title:'')+'. Scan your own suspicious messages free: https://HomeFraudDefense.org/fraudscan';
+  window.location.href = 'sms:?body='+encodeURIComponent(text);
+}
+
+function hfdCopyAlertURL() {
+  const url = hfdAlertURL || window.location.href;
+  navigator.clipboard.writeText(url).then(() => {
+    const btn = document.getElementById('hfdCopyAlertBtn');
+    btn.textContent = '✓ Copied!';
+    btn.style.background = '#1A7A4A';
+    setTimeout(() => { btn.textContent = 'Copy Link'; btn.style.background = ''; }, 2200);
+  }).catch(() => prompt('Copy this link:', url));
+}
+
+function hfdCopyShareText() {
+  // Legacy — redirect to image copy
+  hfdCopyImageToClipboard();
+}
+
+async function hfdCopyImageToClipboard() {
+  const btn = document.getElementById('hfdCopyImgBtn');
+  const dataURL = window._hfdShareDataURL;
+  if (!dataURL) {
+    // Build it now if not ready
+    const canvas = hfdBuildReportCanvas();
+    if (!canvas) return;
+    window._hfdShareDataURL = canvas.toDataURL('image/png');
+    return hfdCopyImageToClipboard();
+  }
+
+  try {
+    // Convert dataURL to blob and write to clipboard
+    const res = await fetch(dataURL);
+    const blob = await res.blob();
+    await navigator.clipboard.write([
+      new ClipboardItem({ 'image/png': blob })
+    ]);
+    btn.textContent = '\u2713 Image Copied!';
+    btn.classList.add('success');
+    // Update instruction note
+    const note = document.getElementById('hfdShareStepNote');
+    if (note) note.innerHTML = '<strong style="color:#3FBF7F">\u2713 Image copied!</strong> Now click a platform button below, start a new post, and press <strong>Ctrl+V</strong> (or \u2318+V on Mac) to paste it.';
+    setTimeout(() => {
+      btn.textContent = '\uD83D\uDCCB Copy Image to Clipboard';
+      btn.classList.remove('success');
+    }, 4000);
+  } catch(e) {
+    // Clipboard API blocked (some browsers) — fall back to download
+    console.warn('Clipboard write failed:', e);
+    btn.textContent = '\u2193 Saving image instead...';
+    hfdDownloadCard();
+    const note = document.getElementById('hfdShareStepNote');
+    if (note) note.innerHTML = '<strong style="color:var(--gold)">Image saved to your downloads.</strong> Open a platform below, start a new post, and attach the saved PNG file.';
+    setTimeout(() => { btn.textContent = '\uD83D\uDCCB Copy Image to Clipboard'; }, 3000);
+  }
+}
+
+// ─── SHARE THIS SCANNER (tool-level, not results) ────────────────────────────
+const HFD_SCANNER_URL = 'https://HomeFraudDefense.org/fraudscan';
+
+function hfdScannerShareFacebook() {
+  const text = encodeURIComponent('🚨 Free real estate fraud scanner — paste any suspicious email, text, or letter and AI tells you if it\'s a scam in seconds. Powered by FBI IC3 data. Free, no account needed.');
+  const url = encodeURIComponent(HFD_SCANNER_URL);
+  window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${text}`, '_blank', 'width=600,height=500');
+}
+
+function hfdScannerShareTwitter() {
+  const text = encodeURIComponent(`🚨 Free AI fraud scanner for homeowners & real estate pros\n\nPaste any suspicious email, text, or letter — get a risk verdict in seconds, powered by FBI IC3 data.\n\nFree. No account needed.\n\n${HFD_SCANNER_URL}\n\n#RealEstateFraud #DeedFraud #WireFraud #HomeOwner`);
+  window.open(`https://twitter.com/intent/tweet?text=${text}`, '_blank', 'width=600,height=400');
+}
+
+function hfdScannerShareLinkedIn() {
+  const url = encodeURIComponent(HFD_SCANNER_URL);
+  const title = encodeURIComponent('HFD™ FraudScan — Free Real Estate Fraud Scanner');
+  const summary = encodeURIComponent('Real estate fraud cost Americans $173.6M last year. Home Fraud Defense™ built a free AI scanner that checks any suspicious message against FBI IC3 and FTC fraud data in seconds. Share with your clients and team — it could save a closing.');
+  window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}&title=${title}&summary=${summary}`, '_blank', 'width=600,height=500');
+}
+
+function hfdScannerShareSMS() {
+  const text = encodeURIComponent(`Hey — if you ever get a suspicious email or text about your home or a real estate deal, use this free scanner before you act on it: ${HFD_SCANNER_URL} — checks it against FBI fraud data in seconds.`);
+  window.location.href = `sms:?body=${text}`;
+}
+
+function hfdScannerCopyLink() {
+  const btn = document.getElementById('hfdCopyScannerLink');
+  navigator.clipboard.writeText(HFD_SCANNER_URL).then(() => {
+    btn.textContent = '✓ Link Copied!';
+    setTimeout(() => { btn.innerHTML = '🔗 Copy Link'; }, 2200);
+  }).catch(() => prompt('Copy this link:', HFD_SCANNER_URL));
+}
+
+function hfdCopyLink(e) {
+  const btn = e.target;
+  navigator.clipboard.writeText(window.location.href.split('?')[0])
+    .then(() => {
+      btn.textContent = '✓ Copied!';
+      setTimeout(() => btn.textContent = 'Copy Link', 2000);
+    })
+    .catch(() => alert('Copy this URL: ' + window.location.href));
+}
+
+// ─── EVENT DELEGATION ────────────────────────────────────────────────────────
+// Replaces all inline onclick= handlers — required for Squarespace compatibility
+</script>
+</body>
+</html>
