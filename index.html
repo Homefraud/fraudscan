@@ -399,7 +399,7 @@
         </div>
         <div class="hfd-signup-success" id="hfdSignupSuccess">
           <span style="font-size:28px">✅</span>
-          <span>You're in! Watch for fraud alerts from <strong>info@HomeFraudDefense.org</strong>.</span>
+          <span>You're in! Watch for fraud alerts from <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="442d2a222b040c2b29210236253120002122212a37216a2b3623">[email&#160;protected]</a></strong>.</span>
         </div>
       </div>
 
@@ -470,7 +470,7 @@
 <div class="hfd-footer">
   <p>
     <strong>Home Fraud Defense™</strong> · HFDCP™ National Designation · ADRE School #S25-0019<br>
-    7865 W. Bell Road #1070, Peoria, AZ 85382 · 855-552-2863 · info@HomeFraudDefense.org<br><br>
+    7865 W. Bell Road #1070, Peoria, AZ 85382 · 855-552-2863 · <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f79e999198b7bf989a92b185968293b3929192998492d9988590">[email&#160;protected]</a><br><br>
     This tool provides educational analysis only and does not constitute legal or financial advice.<br>
     Home Fraud Defense™ does not investigate crimes or accept fraud reports.<br>
     © 2026 Home Fraud Defense™ LLC. Home Fraud Defense™ and HFDCP™ are trademarks of Home Fraud Defense™ LLC.
@@ -482,10 +482,10 @@
   style="position:fixed;left:-9999px;top:-9999px;opacity:0;width:1px;height:1px;"
   onchange="hfdFileSelected(event)"/>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ─── CONFIG ───────────────────────────────────────────────────────────────────
 const HFD_WORKER_URL = 'https://hfd-fraud-scan.john-rowan6.workers.dev'; // used only for /api/signup
-const HFD_API_KEY = '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';
+const HFD_API_KEY = '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';
 
 const HFD_SYSTEM = `You are the HFD™ Fraud Scanner, an AI fraud detection tool built by Home Fraud Defense™ — the national standard for real estate fraud education. Your analysis is grounded in FBI IC3, FTC Consumer Sentinel, and FinCEN real estate crime data.
 
@@ -821,15 +821,4 @@ function hfdScannerCopyLink() {
   navigator.clipboard.writeText(HFD_SCANNER_URL).then(function() {
     btn.textContent = '✓ Copied!';
     setTimeout(function() { btn.innerHTML = '🔗 Copy Link'; }, 2200);
-  }).catch(function() { prompt('Copy this link:', HFD_SCANNER_URL); });
-}
-function hfdCopyLink(e) {
-  var btn = e.target;
-  navigator.clipboard.writeText(window.location.href.split('?')[0]).then(function() {
-    btn.textContent = '✓ Copied!';
-    setTimeout(function() { btn.textContent = 'Copy Link'; }, 2000);
-  }).catch(function() { alert('Copy this URL: ' + window.location.href); });
-}
-</script>
-</body>
-</html>
+  }).catch(function() { prompt('Copy this link:', HFD_S
